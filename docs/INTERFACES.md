@@ -446,12 +446,11 @@ HTTP contracts:
 
 HTTP header matching is case-insensitive. Session creation authenticates the key, creates a random session bound to the resulting `user_id`, and returns its TTL. Chat authenticates the key and checks the session owner before running the pipeline. Delete authenticates, checks ownership, calls `vault.clear_session(session_id)`, then deletes session state. Unknown, expired, and wrong-owner sessions share the same 403 body `{"detail":"Request blocked."}`. Operational faults return `{"detail":"Request could not be completed."}` with 503. The existing `GET /health` remains independent of the pipeline.
 
-## TODO: M1 files that must change to implement these contracts
+## Completed: M1 files updated to implement these contracts
 
-- `gateway/policy.py`: add `PatientPolicy.can_access_patient(context, patient_id)` and preserve deny-by-default field checks.
-- `gateway/data.py`: add assignment tables, parameterized row-authorization/retrieval checks, and import/reference `PatientStore` from this M1 module.
-- `data/seed_synthetic.py`: seed doctor/clerk patient assignments and nurse ward assignments.
-- `gateway/config.py`: parse `HEIMDALL_CLINICAL_MODE`, `HEIMDALL_DEBUG_TRACE`, session TTL, prompt limit, and vault key configuration.
-- `gateway/main.py`: retain `GET /health`; add session/chat/delete routes, `SessionManager`, request/response contracts, and the orchestrator. Extend `PipelineResponse` with `sanitized_prompt`.
-- `tests/test_m1.py` and new module tests: cover row assignment allow/deny, identical 403 for nonexistent/unassigned IDs, clinical mode, session ownership/TTL/deletion, marker spoofing/deduplication, vault thread safety, output block versus scanner fault, byte limit, and audit fields.
-- `Makefile`, `requirements.txt`, and setup/evidence scripts may be updated to wire in resulting modules; do not mark M2 complete until its implementation and tests are reviewed.
+- `gateway/policy.py`: `PatientPolicy.can_access_patient(context, patient_id)` and deny-by-default field checks.
+- `gateway/data.py`: assignment tables and parameterized row-authorization/retrieval checks; `PatientStore` is referenced from this module.
+- `data/seed_synthetic.py`: doctor/clerk patient assignments and nurse ward assignments.
+- `gateway/config.py`: `HEIMDALL_CLINICAL_MODE`, `HEIMDALL_DEBUG_TRACE`, session TTL, prompt limit, and vault key configuration.
+- `gateway/main.py`: `GET /health`, session/chat/delete routes, `SessionManager`, request/response contracts, orchestrator, and `PipelineResponse.sanitized_prompt`.
+- `tests/test_m1.py` and module tests: assignment allow/deny, identical 403 for nonexistent/unassigned IDs, clinical mode, session ownership/TTL/deletion, marker spoofing/deduplication, vault thread safety, output block versus scanner fault, byte limit, and audit fields.

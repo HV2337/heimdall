@@ -10,7 +10,8 @@
 - [ ] M6
 
 ## M4
-- M4 complete, with the PATIENT_ID issue open: output control and audit (PR #1 by Muhammed Shifas NK), orchestrator, session manager, HTTP routes (`POST /v1/session`, `POST /v1/chat`, `DELETE /v1/session`, `GET /health`), demo script, review-driven fixes. 69 `unittest` tests pass on the Windows laptop (Python 3.12.4).
+- M4 complete: output control and audit (PR #1 by Muhammed Shifas NK), orchestrator, session manager, HTTP routes (`POST /v1/session`, `POST /v1/chat`, `DELETE /v1/session`, `GET /health`), demo script, review-driven fixes. 72 `unittest` tests pass on the Windows laptop (Python 3.12.4).
+- Fixed output marker parsing to support underscore token types; the mock includes the `id` field again.
 - Not implemented: `LocalLLM` and `ExternalLLM` are stubs that raise `LLMError`; the demo uses the deterministic `MockLLM`.
 
 ## Verified on LinuxONE VM
@@ -39,4 +40,3 @@ M1.5: 11 `unittest` tests passed on s390x (Python 3.12.3). M2: 30 passed, includ
 - Sessions are lost on restart (single process).
 - Doctors can see `billing_amount` by policy.
 - The demo LLM is a mock.
-- The output scanner rejects marker-shaped `PATIENT_ID` strings, so `PATIENT_ID` tokens cannot currently appear in model answers and the mock omits the id field. Detokenization of `PATIENT_ID` is therefore not exercised end to end. Under investigation.

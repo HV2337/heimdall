@@ -109,6 +109,8 @@ class OrchestratorTests(unittest.TestCase):
                               ("billing_clerk", "billing-key"))
         }
         self.assertEqual(len(set(answers.values())), 3)
+        for answer in answers.values():
+            self.assertIn(f'"id":"{self.patient_id}"', answer)
         self.assertIn("Routine follow-up", answers["doctor"])
         self.assertNotIn("Routine follow-up", answers["nurse"])
         self.assertIn("systolic", answers["nurse"])
@@ -305,6 +307,24 @@ class OrchestratorTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("Mira Example", llm.prompts[-1])
         self.assertNotIn("+91-98765-43210", llm.prompts[-1])
+
+    def test_echoed_aadhaar_marker_is_redacted_without_blocking(self) -> None:
+        import re
+
+        class EchoGovMarkerLLM:
+            def generate(self, prompt, timeout_seconds):
+                match = re.search(r"\[GOV_ID_[0-9]+\]", prompt)
+                if match is None:
+                    raise AssertionError("sanitized prompt had no GOV_ID marker")
+                return f"Patient identifier {match.group(0)}"
+
+        response = run_pipeline(
+            self.request(prompt="My Aadhaar is 1234 5678 9012."),
+            replace(self.dependencies, classifier=_AllowClassifier(),
+                    llm=EchoGovMarkerLLM()),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.answer, "Patient identifier [REDACTED]")
 
     def test_hidden_name_is_scrubbed_from_note_for_role_without_name_access(self) -> None:
         class NoteStore:

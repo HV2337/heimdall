@@ -6,6 +6,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from typing import get_args
 
 from gateway.audit import JsonlAuditWriter
 from gateway.contracts import (
@@ -14,6 +15,7 @@ from gateway.contracts import (
     CheckedOutput,
     OutputBlocked,
     RequestContext,
+    TokenType,
     VaultError,
     VaultUnknownToken,
 )
@@ -36,6 +38,53 @@ class OutputAuditTests(unittest.TestCase):
         self.assertIn("DIAGNOSIS", allowed_token_types("doctor", True))
         self.assertNotIn("PERSON", allowed_token_types("nurse", True))
         self.assertIn("PERSON", allowed_token_types("billing_clerk", False))
+        for role in ("doctor", "nurse", "billing_clerk"):
+            for clinical_mode in (False, True):
+                self.assertFalse(allowed_token_types(role, clinical_mode) & {
+                    "EMAIL", "GOV_ID", "IP_ADDRESS", "API_KEY", "FILE_PATH", "SECRET"
+                })
+
+    def test_every_contract_token_type_resolves_or_redacts_by_role_and_mode(self) -> None:
+        token_types = get_args(TokenType)
+        for role in ("doctor", "nurse", "billing_clerk"):
+            for clinical_mode in (False, True):
+                context = RequestContext("req", role, role, f"session-{role}-{clinical_mode}")
+                vault = InMemoryTokenVault(b"m" * 32, clock=lambda: 10.0)
+                allowed = allowed_token_types(role, clinical_mode)
+                for token_type in token_types:
+                    with self.subTest(role=role, clinical_mode=clinical_mode,
+                                      token_type=token_type):
+                        value = f"synthetic {token_type} value"
+                        marker = vault.put(context, token_type, value, 60)
+                        checked = check_output(f"Patient {marker} is stable", (),
+                                               role, clinical_mode)
+                        result = detokenize_output(checked, context, vault, clinical_mode)
+                        if token_type in allowed:
+                            self.assertEqual(result, f"Patient {value} is stable")
+                        else:
+                            self.assertEqual(result, "Patient [REDACTED] is stable")
+
+    def test_unknown_forged_cross_session_and_expired_markers_block(self) -> None:
+        with self.assertRaises(OutputBlocked):
+            check_output("Patient [SSN_1] is stable", (), "doctor", False)
+        with self.assertRaises(OutputBlocked):
+            detokenize_output(CheckedOutput("Patient [PATIENT_ID_99] is stable"),
+                              self.context, self.vault, False)
+
+        context_a = RequestContext("a", "user-1", "doctor", "session-a")
+        context_b = RequestContext("b", "user-1", "doctor", "session-b")
+        marker = self.vault.put(context_a, "PATIENT_ID", "patient-42", 60)
+        checked = check_output(marker, (), "doctor", False)
+        with self.assertRaises(OutputBlocked):
+            detokenize_output(checked, context_b, self.vault, False)
+
+        now = [10.0]
+        expiring_vault = InMemoryTokenVault(b"e" * 32, clock=lambda: now[0])
+        expiring_marker = expiring_vault.put(self.context, "PATIENT_ID", "patient-43", 1)
+        now[0] = 12.0
+        expiring_checked = check_output(expiring_marker, (), "doctor", False)
+        with self.assertRaises(OutputBlocked):
+            detokenize_output(expiring_checked, self.context, expiring_vault, False)
 
     def test_check_output_blocks_sensitive_patterns_and_canaries(self) -> None:
         for value in (

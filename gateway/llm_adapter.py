@@ -22,13 +22,7 @@ class MockLLM(LLMAdapter):
                 raise ValueError
             if not records:
                 return "No permitted records were requested."
-            # The scanner grammar currently treats the underscore in PATIENT_ID
-            # as a forged marker shape; the mock therefore omits that field.
-            response_records = [
-                {name: value for name, value in row.items() if name != "id"}
-                for row in records
-            ]
-            rendered = json.dumps(response_records, ensure_ascii=False, sort_keys=True,
+            rendered = json.dumps(records, ensure_ascii=False, sort_keys=True,
                                   separators=(",", ":"))
             return f"Summary for the requested record(s): {rendered}"
         except Exception:

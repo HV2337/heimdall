@@ -20,7 +20,11 @@ from gateway.contracts import (
 )
 
 _TOKEN_TYPES = frozenset(get_args(TokenType))
-_MARKER_RE = re.compile(r"\[([A-Z][A-Z0-9_]*)_([0-9]+)\]")
+# A marker-shaped span is bracketed text starting with an uppercase type name,
+# containing an underscore, and ending at the next closing bracket. Its final
+# underscore separates the token type from the numeric counter.
+_MARKER_SHAPE_RE = re.compile(r"\[([A-Z][A-Z0-9_]*_[^\]]*)\]")
+_TOKEN_TYPE_RE = re.compile(r"[A-Z][A-Z0-9_]*\Z")
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+", re.I)
 _PHONE_RE = re.compile(r"(?<!\w)\+?\d[\d\s().-]{5,}\d(?!\w)")
 _INDIAN_PHONE_RE = re.compile(r"(?<!\d)(?:\+91[ -]?|0[ -]?)?[6-9]\d{2}[ -]?\d{3}[ -]?\d{4}(?!\d)|(?<!\d)(?:\+91[ -]?|0[ -]?)?[6-9]\d{4}[ -]?\d{5}(?!\d)")
@@ -45,17 +49,14 @@ def allowed_token_types(role: Role, clinical_mode: bool) -> frozenset[TokenType]
     """Return token types whose values the caller's role may receive."""
     try:
         if role == "doctor":
-            allowed: set[TokenType] = {
-                "PERSON", "PATIENT_ID", "PHONE", "EMAIL", "GOV_ID",
-                "IP_ADDRESS", "API_KEY", "FILE_PATH", "SECRET",
-            }
+            allowed: set[TokenType] = {"PERSON", "PATIENT_ID", "PHONE"}
             if clinical_mode:
                 allowed.update({"DIAGNOSIS", "VITAL", "MEDICATION", "NOTE"})
             return frozenset(allowed)
         if role == "nurse":
             return frozenset({"PATIENT_ID", "VITAL", "MEDICATION"}) if clinical_mode else frozenset({"PATIENT_ID"})
         if role == "billing_clerk":
-            return frozenset({"PERSON", "PATIENT_ID", "PHONE", "EMAIL", "GOV_ID", "IP_ADDRESS", "API_KEY", "FILE_PATH", "SECRET"})
+            return frozenset({"PERSON", "PATIENT_ID", "PHONE"})
         raise ValueError("invalid role")
     except Exception:
         raise OutputControlError("invalid_role") from None
@@ -84,6 +85,20 @@ def _has_sensitive_pattern(text: str) -> bool:
     return _contains_ip(text)
 
 
+def _validated_markers(text: str) -> list[tuple[re.Match[str], str]]:
+    """Parse marker-shaped spans using the last underscore as counter separator."""
+    markers: list[tuple[re.Match[str], str]] = []
+    for match in _MARKER_SHAPE_RE.finditer(text):
+        token_type, separator, counter = match.group(1).rpartition("_")
+        if (not separator or _TOKEN_TYPE_RE.fullmatch(token_type) is None
+                or re.fullmatch(r"[0-9]+", counter) is None):
+            raise OutputBlocked("invalid_output_marker")
+        if token_type not in _TOKEN_TYPES:
+            raise OutputBlocked("unknown_output_marker")
+        markers.append((match, token_type))
+    return markers
+
+
 def check_output(text: str, canary_values: tuple[str, ...], role: Role,
                  clinical_mode: bool) -> CheckedOutput:
     """Reject raw sensitive values, canaries, and unknown token marker types."""
@@ -95,13 +110,7 @@ def check_output(text: str, canary_values: tuple[str, ...], role: Role,
         allowed_token_types(role, clinical_mode)  # Validate the supplied role/mode.
         if any(value in text for value in canary_values) or _has_sensitive_pattern(text):
             raise OutputBlocked("output_content_blocked")
-        for match in _MARKER_RE.finditer(text):
-            token_type = match.group(1)
-            if token_type not in _TOKEN_TYPES:
-                raise OutputBlocked("unknown_output_marker")
-        # Bracketed marker-shaped values that do not match the grammar are forged.
-        if re.search(r"\[(?![A-Z][A-Z0-9]*_[0-9]+\])[A-Z][A-Z0-9_]*_[^\]\s]*\]", text):
-            raise OutputBlocked("invalid_output_marker")
+        _validated_markers(text)
         return CheckedOutput(text)
     except (OutputBlocked, OutputControlError):
         raise
@@ -118,10 +127,8 @@ def detokenize_output(output: CheckedOutput, context: RequestContext,
         allowed = allowed_token_types(context.role, clinical_mode)
         pieces: list[str] = []
         cursor = 0
-        for match in _MARKER_RE.finditer(output.text):
-            token_type = match.group(1)
-            if token_type not in _TOKEN_TYPES:
-                raise OutputBlocked("unknown_output_marker")
+        markers = _validated_markers(output.text)
+        for match, token_type in markers:
             pieces.append(output.text[cursor:match.start()])
             marker = match.group(0)
             if token_type not in allowed:
@@ -131,8 +138,6 @@ def detokenize_output(output: CheckedOutput, context: RequestContext,
             cursor = match.end()
         pieces.append(output.text[cursor:])
         result = "".join(pieces)
-        if re.search(r"\[(?![A-Z][A-Z0-9]*_[0-9]+\])[A-Z][A-Z0-9_]*_[^\]\s]*\]", result):
-            raise OutputBlocked("invalid_output_marker")
         return result
     except (VaultUnknownToken, VaultExpiredToken):
         raise OutputBlocked("unknown_output_marker") from None
