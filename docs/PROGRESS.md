@@ -6,7 +6,7 @@
 - [x] M2
 - [x] M3
 - [x] M4
-- [ ] M5 evaluation — not started
+- [ ] M5 evaluation — in progress (scaled deterministic synthetic probes and baselines; runner not started)
 - [ ] M6
 
 ## M4
