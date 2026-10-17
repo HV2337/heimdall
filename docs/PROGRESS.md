@@ -40,6 +40,8 @@ Update this file at the end of every task. Keep it short.
 - Windows setup and commands are documented in `docs/SETUP.md`; line endings are forced to LF for shell scripts, Makefile, and Python files.
 - `python -m unittest discover -s tests -v`: 23 tests passed from the activated Windows project venv (9 original M1 tests, 2 M1 assignment/config tests, and 12 M2 tests).
 - All new gateway scaffolding modules import successfully.
-- M2 implements normalization, encrypted vault, and sanitization. VM verification is pending; M3 remains not started.
+- M2 sanitizer hardening covers Indian identity/phone formats, keys/secrets, email, IP addresses, and filesystem paths; VM verification remains pending and M3 remains not started.
+- `python scripts/demo_sanitize.py`: 8 synthetic before/model-input examples displayed; encoded email was blocked before model input.
+- `python -m unittest discover -s tests -v` from the activated Windows venv: 28 tests passed.
 - `bash -n scripts/setup_vm.sh` and `bash -n evidence/capture_platform.sh`: passed.
 - `make test` could not run in the Windows workspace because GNU Make is unavailable.

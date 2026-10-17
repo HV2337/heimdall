@@ -131,6 +131,58 @@ class NormalizeVaultSanitizeTests(unittest.TestCase):
                         default_sanitization_policy(), today=date(2026, 1, 1),
                     )
 
+    def test_indian_government_id_formats(self) -> None:
+        result = sanitize_text(
+            "Aadhaar 123456789012; grouped 1234-5678-9012; PAN ABCDE1234F",
+            self.context, self.vault, 60,
+        )
+        self.assertEqual(result.entity_counts.get("GOV_ID"), 3)
+        self.assertNotIn("123456789012", result.text)
+        self.assertNotIn("ABCDE1234F", result.text)
+
+    def test_indian_and_international_phone_formats(self) -> None:
+        samples = (
+            "+91 98765 43210", "098765-43210", "98765 43210",
+            "+1 (212) 555-0198", "+44 20 7946 0958",
+        )
+        for index, sample in enumerate(samples):
+            with self.subTest(sample=sample):
+                context = RequestContext(f"req-{index}", "doctor-1", "doctor", f"phone-{index}")
+                result = sanitize_text(sample, context, self.vault, 60)
+                self.assertEqual(result.entity_counts.get("PHONE"), 1)
+                self.assertNotIn(sample, result.text)
+
+    def test_api_keys_secrets_and_long_random_strings(self) -> None:
+        samples = (
+            ("api_key=abcdEFGH12345678", "API_KEY"),
+            ("token: abcdefghijklmnop", "SECRET"),
+            ("sk-live-0123456789abcdef", "API_KEY"),
+            ("AKIA1234567890ABCDEF", "API_KEY"),
+            ("hex 0123456789abcdef0123456789abcdef", "SECRET"),
+            ("base64 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef123456==", "SECRET"),
+            ("Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1In0.signature123456789", "SECRET"),
+        )
+        for index, (sample, token_type) in enumerate(samples):
+            with self.subTest(sample=sample):
+                context = RequestContext(f"req-{index}", "doctor-1", "doctor", f"secret-{index}")
+                result = sanitize_text(sample, context, self.vault, 60)
+                self.assertEqual(result.entity_counts.get(token_type), 1)
+
+    def test_email_addresses_and_ipv4_ipv6(self) -> None:
+        result = sanitize_text(
+            "mail user.name+tag@example.test; hosts 192.0.2.4 and 2001:db8::1",
+            self.context, self.vault, 60,
+        )
+        self.assertEqual(result.entity_counts.get("EMAIL"), 1)
+        self.assertEqual(result.entity_counts.get("IP_ADDRESS"), 2)
+
+    def test_windows_and_unix_paths(self) -> None:
+        result = sanitize_text(
+            r"files C:\Users\Ari\records\patient.txt and /var/lib/heimdall/patient.db",
+            self.context, self.vault, 60,
+        )
+        self.assertEqual(result.entity_counts.get("FILE_PATH"), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

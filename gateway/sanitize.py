@@ -30,16 +30,26 @@ from gateway.policy import ROLE_FIELDS
 _MARKER_RE = re.compile(r"\[[A-Z][A-Z0-9_]*_[0-9]+\]")
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+", re.I)
 _API_KEY_RE = re.compile(
-    r"(?i)(?:\b(?:api[_-]?key|access[_-]?token|secret)\s*[:=]\s*[A-Za-z0-9._~+/=-]{8,}"
-    r"|\bsk-[A-Za-z0-9_-]{16,}|\bAKIA[0-9A-Z]{16}\b)"
+    r"(?i)(?:\bapi[_-]?key\s*[:=]\s*[A-Za-z0-9._~+/=-]{8,}"
+    r"|\bsk-[A-Za-z0-9_-]{12,}|\bAKIA[0-9A-Z]{16}\b)"
 )
-_SECRET_RE = re.compile(r"(?i)\b(?:bearer\s+[A-Za-z0-9._~+/=-]{8,}|password\s*[:=]\s*\S+)")
+_SECRET_RE = re.compile(
+    r"(?i)(?:\b(?:bearer|token|access[_-]?token|secret)\s*[:=]?\s*[A-Za-z0-9._~+/=-]{8,}"
+    r"|\bpassword\s*[:=]\s*\S+|\b[0-9a-f]{32,}\b"
+    r"|\b[A-Za-z0-9+/_-]{32,}={0,2}\b)"
+)
 _PATH_RE = re.compile(r"(?<!\w)(?:[A-Za-z]:[\\/](?:[^\s<>:\"|?*]+[\\/]?)+|/(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+)")
-_SSN_RE = re.compile(r"(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)")
-_AADHAAR_RE = re.compile(r"(?<!\d)(?:\d{4}[ -]?){2}\d{4}(?!\d)")
+_SSN_RE = re.compile(r"(?<![A-Za-z0-9])\d{3}-\d{2}-\d{4}(?![A-Za-z0-9])")
+_AADHAAR_RE = re.compile(r"(?<![A-Za-z0-9])(?:\d{4}[ -]?){2}\d{4}(?![A-Za-z0-9])")
+_PAN_RE = re.compile(r"(?i)(?<![A-Z0-9])[A-Z]{5}\d{4}[A-Z](?![A-Z0-9])")
 _IPV4_CANDIDATE_RE = re.compile(r"(?<![\w.])(?:\d{1,3}\.){3}\d{1,3}(?![\w.])")
 _IPV6_CANDIDATE_RE = re.compile(r"(?<![\w:])(?:[0-9A-Fa-f]{0,4}:){2,}[0-9A-Fa-f:.]{0,39}(?![\w:])")
 _PHONE_RE = re.compile(r"(?<!\w)\+?\d[\d\s().-]{5,}\d(?!\w)")
+_INDIAN_MOBILE_RE = re.compile(
+    r"(?<!\d)(?:\+91[ -]?|0[ -]?)?[6-9]\d{2}[ -]?\d{3}[ -]?\d{4}(?!\d)|"
+    r"(?<!\d)(?:\+91[ -]?|0[ -]?)?[6-9]\d{4}[ -]?\d{5}(?!\d)"
+)
+_LONG_RANDOM_RE = re.compile(r"(?<![A-Za-z0-9])[A-Za-z0-9+/_-]{32,}={0,2}(?![A-Za-z0-9])")
 
 _TOKEN_SCAN_ORDER = (
     ("SECRET", _SECRET_RE),
@@ -48,6 +58,8 @@ _TOKEN_SCAN_ORDER = (
     ("EMAIL", _EMAIL_RE),
     ("GOV_ID", _SSN_RE),
     ("GOV_ID", _AADHAAR_RE),
+    ("GOV_ID", _PAN_RE),
+    ("SECRET", _LONG_RANDOM_RE),
 )
 
 
@@ -80,7 +92,8 @@ def _sensitive_spans(text: str, known_names: tuple[str, ...] = ()) -> list[tuple
     for start, end, token_type in _validated_ip_matches(text):
         candidates.append((start, end, priority, token_type))
     priority += 1
-    for match in _PHONE_RE.finditer(text):
+    phone_matches = list(_INDIAN_MOBILE_RE.finditer(text)) + list(_PHONE_RE.finditer(text))
+    for match in phone_matches:
         digits = sum(char.isdigit() for char in match.group(0))
         date_like = re.fullmatch(r"(?:\d{4}-\d{1,2}-\d{1,2}|\d{1,2}/\d{1,2}/\d{2,4})", match.group(0).strip())
         if 7 <= digits <= 15 and date_like is None:
