@@ -9,6 +9,11 @@
 - [ ] M5 eval harness, baselines, results table
 - [ ] M6 demo UI, Docker, README, threat model, demo script, evidence
 
+## M4 output-control and audit implementation
+- Implemented `gateway/output_control.py` and `gateway/audit.py` against the M4 module interfaces.
+- Added focused unit coverage for raw output leak blocking, canary and marker checks, role-limited detokenization, vault faults, audit fields, and audit failures.
+- The broader M4 LLM adapter and pipeline integration remain incomplete; M4 is not marked done.
+
 ## Decisions
 - Markers are per-session counters `[TYPE_n]`.
 - Sanitization uses `clean_text`.
