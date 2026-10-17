@@ -10,6 +10,11 @@ authenticates, resolves role, enforces data permissions before retrieval, normal
 - Patient fields: name, phone, dob, ward, diagnosis, vitals, meds, billing_amount, notes, timestamps.
 - Example policy: doctor sees clinical fields; nurse sees vitals, meds and ward but not billing; billing_clerk sees name, phone and billing but not diagnosis or notes.
 
+### LinuxONE dependencies and model artifacts
+- Install `numpy`, `scipy`, `scikit-learn`, and `cryptography` from Ubuntu apt packages on the LinuxONE VM. PyPI does not provide s390x wheels for SciPy/scikit-learn, and the VM has no `gfortran`; the existing venv must include system site packages.
+- Keep those compiled dependencies out of `requirements.txt`; `requirements-laptop.txt` is for laptop installs and pins scikit-learn to `1.4.*` to match the VM.
+- Save classifier artifacts as portable JSON or NPZ, never pickle. Train the classifier on the LinuxONE VM to account for its big-endian architecture; save the training metrics with the artifact.
+
 ## 3. Pipeline (one module per stage)
 Request flow:
 `auth -> policy -> retrieve -> normalize -> threat -> sanitize -> llm -> output_control -> detokenize -> audit`
@@ -45,9 +50,12 @@ heimdall/
   ui/       app.py
   demo/     DEMO_SCRIPT.md seed_demo.sh
   evidence/ capture_platform.sh bench.py
-  docs/     SPEC.md PROGRESS.md THREAT_MODEL.md
-  AGENTS.md README.md THIRD_PARTY.md Makefile Dockerfile docker-compose.yml .env.example
+  scripts/  setup_vm.sh
+  docs/     SPEC.md PROGRESS.md INTERFACES.md THREAT_MODEL.md
+  AGENTS.md README.md THIRD_PARTY.md Makefile requirements.txt requirements-laptop.txt Dockerfile docker-compose.yml .env.example
 ```
+
+`docs/INTERFACES.md` is the implementation contract for remaining pipeline modules and must be read before parallel module work.
 
 ## 5. Evaluation harness
 Generate labeled sets: PII prompts, benign prompts, injection prompts, role-boundary queries, output-leak probes, cross-session probes.
@@ -63,7 +71,7 @@ Output a markdown table with:
 Save every run to `eval/results/` with a timestamp.
 
 ## 6. Tests
-- pytest per module.
+- Use Python's standard-library `unittest`; run the suite with `python -m unittest discover -s tests -v` (also exposed as `make test`).
 - Fail-closed tests: simulate each component failing and assert the request is blocked.
 - End-to-end: doctor vs nurse vs billing_clerk asking the same question get different, correct answers.
 - Cross-session isolation test.
@@ -75,7 +83,7 @@ Role selector, chat box, a panel showing what the LLM actually saw (sanitized pr
 - `README.md`: title "Aegis_IBM Z Datathon 2026 Project", event code SSF2026, problem statement with three placeholders for cited statistics (the team fills these in), mermaid architecture diagram, tech stack, how it uses LinuxONE, setup/run, evaluation table, threat model summary, limitations, and a note that AI coding assistance was used.
 - `docs/THREAT_MODEL.md`: attackers (curious insider, malicious prompter, poisoned record), assets, trust boundaries, out-of-scope items.
 - `demo/DEMO_SCRIPT.md`: 3-minute video script (problem 30s, architecture 30s, live demo 90s, LinuxONE 30s) with exact demo inputs.
-- `evidence/capture_platform.sh`: saves `uname -m`, `lscpu`, `free -h`, `nproc`, container status and python/pip versions to `evidence/*.txt`. `evidence/bench.py`: vault throughput, classifier latency, end-to-end latency.
+- `scripts/setup_vm.sh`: installs the LinuxONE apt packages, ensures the venv includes system site packages, installs pure-Python requirements, and checks imports. `evidence/capture_platform.sh`: saves `uname -m`, `lscpu`, `free -h`, `nproc`, container status, Python/pip and library versions to `evidence/*.txt`. `evidence/bench.py`: vault throughput, classifier latency, end-to-end latency.
 - `THIRD_PARTY.md`.
 
 ## 9. Milestones (stop after each and wait for review)

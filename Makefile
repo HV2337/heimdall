@@ -1,7 +1,13 @@
-.PHONY: setup test run eval demo evidence
+.PHONY: setup setup-vm setup-laptop test run eval demo evidence
 
 setup:
 	python -m pip install -r requirements.txt
+
+setup-vm:
+	bash scripts/setup_vm.sh
+
+setup-laptop:
+	python -m pip install -r requirements-laptop.txt
 
 test:
 	python -m unittest discover -s tests -v
@@ -16,4 +22,4 @@ demo:
 	python -m data.seed_synthetic
 
 evidence:
-	python --version
+	bash evidence/capture_platform.sh

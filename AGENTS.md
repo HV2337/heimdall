@@ -21,6 +21,9 @@ Team: Aegis. Event code: SSF2026. Target platform: IBM LinuxONE Community Cloud 
 
 ### Platform (LinuxONE)
 - Must run on s390x. Prefer the standard library. Before adding any dependency, tell me and flag anything that may lack s390x wheels or need compiling.
+- On the LinuxONE VM, install `numpy`, `scipy`, `scikit-learn`, and `cryptography` from Ubuntu apt packages; the VM lacks PyPI wheels for SciPy/scikit-learn and has no `gfortran`. Keep the existing venv configured with `include-system-site-packages = true` so it can import those apt packages.
+- Keep pure-Python dependencies in `requirements.txt`; compiled ML/crypto dependencies belong in `requirements-laptop.txt` for laptop development. Use `make setup-vm` or `make setup-laptop` as appropriate.
+- Save trained classifier artifacts in portable JSON or NPZ format, never pickle. Train the classifier on the LinuxONE VM because it is big-endian; report its held-out metrics.
 - LLM backend priority: (1) local model on the VM, (2) mock LLM (used by tests and as demo fallback), (3) external provider only as a last resort and only with sanitized text to an allowlisted URL. Default config is local or mock.
 - The threat classifier must be a real trained model (training script, saved artifact, reported metrics). This is the "predictive AI" half; the LLM is the "generative AI" half.
 - Keep everything containerizable (Dockerfile, compose file).
@@ -34,7 +37,8 @@ Team: Aegis. Event code: SSF2026. Target platform: IBM LinuxONE Community Cloud 
 - Keep `main` runnable. `make test` must pass before any commit to `main`.
 - Small commits with clear messages. Do not rewrite files you were not asked to touch.
 - Add or update tests with every change.
+- Use Python's standard-library `unittest` for tests (`python -m unittest discover -s tests -v`); do not use pytest.
 - Code style: Python 3.11+, type hints, short docstrings, no dead code.
 
 ## Commands (create these in the Makefile)
-`make setup`, `make test`, `make run`, `make eval`, `make demo`, `make evidence`
+`make setup`, `make setup-vm`, `make setup-laptop`, `make test`, `make run`, `make eval`, `make demo`, `make evidence`

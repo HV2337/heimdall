@@ -1,0 +1,5 @@
+-r requirements.txt
+numpy
+scipy
+scikit-learn==1.4.*
+cryptography
