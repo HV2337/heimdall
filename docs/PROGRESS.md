@@ -15,7 +15,7 @@
 - Not implemented: `LocalLLM` and `ExternalLLM` are stubs that raise `LLMError`; the demo uses the deterministic `MockLLM`.
 
 ## Verified on LinuxONE VM
-M1.5: 11 `unittest` tests passed on s390x (Python 3.12.3). M2: 30 passed, including the AES-GCM vault with cryptography 41.0.7 from apt. M3: 38 passed, including the sklearn parity test, and the threat classifier was trained on the VM (threshold 0.622653, option D). M4 and later: pending VM verification.
+M1.5: 11 `unittest` tests passed on s390x (Python 3.12.3). M2: 30 passed, including the AES-GCM vault with cryptography 41.0.7 from apt. M3: 38 passed, including the sklearn parity test, and the threat classifier was trained on the VM (threshold 0.622653, option D). M4: 72 unittest tests passed on s390x and scripts/demo_pipeline.py ran. M5 and later: pending VM verification.
 - Platform: s390x, big endian, z/VM 7.3, 3 CPUs, 7.8 GiB RAM, no swap, no Docker or Podman installed. Evidence: `evidence/platform-*.txt`.
 
 ## M3 results
