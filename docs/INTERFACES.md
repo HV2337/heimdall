@@ -36,6 +36,7 @@ class NormalizedText:
     original: str
     clean_text: str
     matching_text: str
+    encoded_sensitive_content: bool = False
 
 @dataclass(frozen=True)
 class ScannableText:
@@ -269,10 +270,10 @@ Authentication errors, `PolicyDenied`, session access denials, threat blocks, `O
 ```python
 class NormalizeError(SafeStageError): ...
 
-def normalize_text(text: str) -> NormalizedText: ...
+def normalize_text(text: str, *, known_names: tuple[str, ...] = ()) -> NormalizedText: ...
 ```
 
-Apply Unicode NFKC and remove every Unicode `Cf` character to produce `clean_text` without decoding. Also decode suspicious segments into `matching_text` for detection only. A base64 candidate is at least 16 consecutive standard or URL-safe base64 characters, optionally ending with up to two `=` characters; pad it to a multiple of four and use the decoded text only if strict decoding produces valid UTF-8. A hexadecimal candidate is an even-length run of at least 12 hex digits; use it only if decoding produces valid UTF-8. Preserve input exactly in `original`. Detection uses `matching_text`; sanitization and LLM prompt construction use `clean_text`, never `original`. If a successfully decoded segment contains content that sanitization would tokenize or matches a deterministic threat rule, block at the threat stage with score `1.0` and `rule_code="encoded_sensitive_content"`. Non-string input or normalization faults raise `NormalizeError`.
+Apply Unicode NFKC and remove every Unicode `Cf` character to produce `clean_text` without decoding. Also decode suspicious segments into `matching_text` for detection only. A base64 candidate is at least 16 consecutive standard or URL-safe base64 characters, optionally ending with up to two `=` characters; pad it to a multiple of four and use the decoded text only if strict decoding produces valid UTF-8. A hexadecimal candidate is an even-length run of at least 12 hex digits; use it only if decoding produces valid UTF-8. Preserve input exactly in `original`. Detection uses `matching_text`; sanitization and LLM prompt construction use `clean_text`, never `original`. `known_names` may contain only names from authorized retrieved fields. Set `encoded_sensitive_content=True` if a successfully decoded segment contains content that sanitization would tokenize, including any supplied known name. The threat stage must block that request with score `1.0` and `rule_code="encoded_sensitive_content"`. Non-string input or normalization faults raise `NormalizeError`.
 
 ## 8. `gateway/vault.py`
 

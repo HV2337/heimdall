@@ -48,6 +48,7 @@ class NormalizedText:
     original: str
     clean_text: str
     matching_text: str
+    encoded_sensitive_content: bool = False
 
 
 @dataclass(frozen=True)

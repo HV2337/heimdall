@@ -5,7 +5,7 @@ Update this file at the end of every task. Keep it short.
 ## Milestones
 - [x] M1 Skeleton, config, mock LLM, auth, policy, data layer, synthetic seed, tests
 - [x] M1.5 shared contracts and module scaffolding (LinuxONE VM verified; user-confirmed)
-- [ ] M2 normalize, sanitize, vault (next; not started)
+- [ ] M2 normalize, sanitize, vault (implemented; LinuxONE VM verification pending)
 - [ ] M3 threat detection (rules + trained classifier)
 - [ ] M4 LLM adapter, output control, audit, full pipeline
 - [ ] M5 eval harness, baselines, results table
@@ -18,7 +18,7 @@ Update this file at the end of every task. Keep it short.
 - No milestone is considered complete until laptop tests and LinuxONE VM verification pass and are confirmed.
 - LinuxONE VM is s390x, Ubuntu 24.04, Python 3.12; 9 `unittest` tests pass, Faker works, and NumPy, SciPy, scikit-learn 1.4.1, and cryptography import from apt packages in the venv with system site packages enabled.
 - Compiled ML/crypto dependencies use apt on LinuxONE and `requirements-laptop.txt` on laptops; portable classifier artifacts use JSON/NPZ and are trained on the big-endian VM.
-- M1 is complete. `docs/INTERFACES.md` defines the M2–M4 contracts; M2 implementation has not started.
+- M1 and M1.5 are complete. `docs/INTERFACES.md` defines the M2–M4 contracts; M2 implementation is complete locally and awaits VM verification. M3 has not started.
 
 ## Known issues
 (Record problems and dependency limits on s390x here.)
@@ -30,7 +30,7 @@ Update this file at the end of every task. Keep it short.
 ## Verified on LinuxONE VM
 (Record what has actually been run and passed on the VM.)
 - M1 verified on s390x Ubuntu 24.04 with Python 3.12: 9 `unittest` tests passed; Faker and apt-provided NumPy, SciPy, scikit-learn 1.4.1, and cryptography imported successfully in the system-site-enabled venv (user-confirmed).
-- M1.5 shared contracts, module scaffolding, and M1 assignment/config updates verified on the LinuxONE VM (user-confirmed); M2 implementation has not started.
+- M1.5 shared contracts, module scaffolding, and M1 assignment/config updates verified on the LinuxONE VM (user-confirmed).
 
 ## M1 status
 - Complete, including LinuxONE VM verification (user-confirmed).
@@ -38,8 +38,8 @@ Update this file at the end of every task. Keep it short.
 
 ## Current task verification
 - Windows setup and commands are documented in `docs/SETUP.md`; line endings are forced to LF for shell scripts, Makefile, and Python files.
-- `python -m unittest discover -s tests -v`: 11 tests passed (9 original tests plus 2 M1 assignment/config tests).
+- `python -m unittest discover -s tests -v`: 23 tests passed from the activated Windows project venv (9 original M1 tests, 2 M1 assignment/config tests, and 12 M2 tests).
 - All new gateway scaffolding modules import successfully.
-- M1.5 adds shared contracts and importable module interfaces without pipeline-stage logic; assignment tables, seeded assignments, policy checks, config flags, and ward-to-department mapping are covered by tests.
+- M2 implements normalization, encrypted vault, and sanitization. VM verification is pending; M3 remains not started.
 - `bash -n scripts/setup_vm.sh` and `bash -n evidence/capture_platform.sh`: passed.
 - `make test` could not run in the Windows workspace because GNU Make is unavailable.
