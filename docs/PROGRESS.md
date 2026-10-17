@@ -4,7 +4,7 @@ Update this file at the end of every task. Keep it short.
 
 ## Milestones
 - [x] M1 Skeleton, config, mock LLM, auth, policy, data layer, synthetic seed, tests
-- [x] M1.5 shared contracts and module scaffolding; M2 remains not started
+- [x] M1.5 shared contracts and module scaffolding (LinuxONE VM verified; user-confirmed)
 - [ ] M2 normalize, sanitize, vault
 - [ ] M3 threat detection (rules + trained classifier)
 - [ ] M4 LLM adapter, output control, audit, full pipeline
@@ -30,6 +30,7 @@ Update this file at the end of every task. Keep it short.
 ## Verified on LinuxONE VM
 (Record what has actually been run and passed on the VM.)
 - M1 verified on s390x Ubuntu 24.04 with Python 3.12: 9 `unittest` tests passed; Faker and apt-provided NumPy, SciPy, scikit-learn 1.4.1, and cryptography imported successfully in the system-site-enabled venv (user-confirmed).
+- M1.5 shared contracts, module scaffolding, and M1 assignment/config updates verified on the LinuxONE VM (user-confirmed); M2 implementation has not started.
 
 ## M1 status
 - Complete, including LinuxONE VM verification (user-confirmed).
