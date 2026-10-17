@@ -225,7 +225,7 @@ def get_patient(self, context: RequestContext, patient_id: int,
 def get_scan_identifiers(self, patient_id: int) -> tuple[str, ...]: ...
 ```
 
-The store uses one SQLite connection per call and is safe for concurrent callers. `get_patient` returns only selected permitted fields or `None`, identical for missing and unassigned rows; database faults raise `PolicyError`. `get_scan_identifiers` returns only that patient's own name and phone for internal free-text scrubbing; these values must never reach callers, audit, or the LLM.
+The store uses one SQLite connection per call and is safe for concurrent callers. `get_patient` returns only selected permitted fields or `None`, identical for missing and unassigned rows; database faults raise `PolicyError`. `get_scan_identifiers` returns only that patient's own name and phone and is used internally to scrub free text for every role, including when the role cannot view those fields. These values must never be returned to callers, written to audit, or placed in the LLM prompt.
 
 ## 5. Sessions and HTTP contract (`gateway/main.py`)
 
@@ -400,7 +400,9 @@ Concrete implementation: `JsonlAuditWriter(path: str | Path)`.
 
 Append one JSON object per line. Record timestamp, request/user/session IDs, role, allow/block decision, blocking stage, HTTP status, threat score, rule code, entity counts, and stage latencies only. Do not record prompts, retrieved text, model output, raw entity values, API keys, canaries, or token maps. File, serialization, permission, and timeout faults raise `AuditError`.
 
-`stage_latency_ms` maps fixed stage names (`auth`, `session`, `policy`, `retrieve`, `normalize`, `threat`, `sanitize`, `llm`, `output_control`, `detokenize`, `audit`) to nonnegative milliseconds. Include completed stages and the elapsed duration for the failed stage. A rule-only threat block records score `1.0` and its rule code.
+`stage_latency_ms` maps fixed stage names (`auth`, `session`, `policy`, `retrieve`, `normalize`, `threat`, `sanitize`, `llm`, `output_control`, `detokenize`) to nonnegative milliseconds. Include completed stages and the elapsed duration for the failed stage. A rule-only threat block records score `1.0` and its rule code.
+
+The `audit` stage duration is not included in the `AuditEvent` it writes because that duration is unknown until the write has completed.
 
 ## 15. `gateway/main.py` orchestrator and HTTP layer
 

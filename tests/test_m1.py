@@ -123,7 +123,10 @@ class MilestoneOneTests(unittest.TestCase):
 
     def test_mock_llm_is_deterministic(self) -> None:
         model = MockLLM()
-        self.assertEqual(model.generate("hello"), "Mock response: hello")
+        prompt = 'Request: hello\\nPermitted records: [{"diagnosis":"Routine follow-up"}]'
+        expected = 'Summary for the requested record(s): [{"diagnosis":"Routine follow-up"}]'
+        self.assertEqual(model.generate(prompt), expected)
+        self.assertEqual(model.generate(prompt), expected)
 
     def test_health_route(self) -> None:
         self.assertEqual(health(), {"status": "ok"})

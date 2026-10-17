@@ -12,7 +12,10 @@
 ## M4 output-control and audit implementation
 - Implemented `gateway/output_control.py` and `gateway/audit.py` against the M4 module interfaces.
 - Added focused unit coverage for raw output leak blocking, canary and marker checks, role-limited detokenization, vault faults, audit fields, and audit failures.
-- The broader M4 LLM adapter and pipeline integration remain incomplete; M4 is not marked done.
+- M4 Part 2 now implements the in-memory session manager, fail-closed orchestrator, HTTP session/chat/delete routes, deterministic record-based mock responses, and an in-process pipeline demo.
+- Hardened orchestration: only the pre-normalization size check maps to 413; dependency initialization returns the generic 503 response with a best-effort redacted audit; a missing row after authorization is attributed to policy. Scan identifiers are used internally for free-text scrubbing for every role and are excluded from the LLM context.
+- Added orchestrator coverage for equivalent unassigned/nonexistent patient responses and audit fields, unknown/wrong-owner/expired session equivalence, debug-trace exclusion on blocked/fault responses, per-request canaries, identifier scrubbing, hidden-name scrubbing, vault cleanup order on deletion/expiry, dependency-initialization failures on all three routes, and stage timing order. The current Windows laptop run passes 69 `unittest` tests.
+- `LocalLLM` and `ExternalLLM` remain unimplemented stubs. The output scanner currently rejects marker-shaped `PATIENT_ID` strings due its forged-marker pattern, so the mock omits the `id` field from its answer. M4 remains incomplete pending resolution and backend work.
 
 ## Decisions
 - Markers are per-session counters `[TYPE_n]`.
