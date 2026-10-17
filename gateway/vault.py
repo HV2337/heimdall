@@ -64,6 +64,7 @@ class InMemoryTokenVault(TokenVault):
             self._lock = threading.RLock()
             self._entries: dict[tuple[str, str, str], _VaultEntry] = {}
             self._lookups: dict[bytes, tuple[str, str, str]] = {}
+            self._counters: dict[tuple[str, str, TokenType], int] = {}
         except Exception:
             raise VaultError("vault_initialization_failed") from None
 
@@ -126,13 +127,10 @@ class InMemoryTokenVault(TokenVault):
                     else:
                         self._lookups.pop(digest, None)
 
-                marker = ""
-                entry_key: tuple[str, str, str]
-                while True:
-                    marker = f"[{token_type}_{secrets.randbits(128)}]"
-                    entry_key = (context.user_id, context.session_id, marker)
-                    if entry_key not in self._entries:
-                        break
+                counter_key = (context.user_id, context.session_id, token_type)
+                marker_number = self._counters.get(counter_key, 0) + 1
+                marker = f"[{token_type}_{marker_number}]"
+                entry_key = (context.user_id, context.session_id, marker)
                 nonce = secrets.token_bytes(12)
                 aad = (context.user_id + "\0" + context.session_id + "\0" + token_type).encode("utf-8")
                 ciphertext = AESGCM(self._session_key(context.user_id, context.session_id)).encrypt(
@@ -141,6 +139,7 @@ class InMemoryTokenVault(TokenVault):
                 entry = _VaultEntry(token_type, nonce, ciphertext, now + ttl_seconds, digest)
                 self._entries[entry_key] = entry
                 self._lookups[digest] = entry_key
+                self._counters[counter_key] = marker_number
                 return marker
         except VaultError:
             raise
@@ -187,5 +186,8 @@ class InMemoryTokenVault(TokenVault):
                 for key, entry in tuple(self._entries.items()):
                     if key[1] == session_id:
                         self._discard(key, entry)
+                for counter_key in tuple(self._counters):
+                    if counter_key[1] == session_id:
+                        self._counters.pop(counter_key, None)
         except Exception:
             raise VaultError("vault_clear_failed") from None

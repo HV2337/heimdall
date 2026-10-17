@@ -44,10 +44,19 @@ class NormalizeVaultSanitizeTests(unittest.TestCase):
     def test_vault_session_isolation(self) -> None:
         marker = self.vault.put(self.context, "PERSON", "Ada Patient", 60)
         other_session = RequestContext("request-2", "doctor-1", "doctor", "session-2")
-        other_marker = self.vault.put(other_session, "PERSON", "Ada Patient", 60)
-        self.assertNotEqual(marker, other_marker)
-        with self.assertRaises(VaultUnknownToken):
-            self.vault.resolve(other_session, marker, frozenset({"PERSON"}))
+        other_marker = self.vault.put(other_session, "PERSON", "Grace Patient", 60)
+        # Counter labels may coincide; the session-scoped vault entries do not.
+        self.assertEqual(marker, "[PERSON_1]")
+        self.assertEqual(other_marker, "[PERSON_1]")
+        # The same label in another session resolves only that session's entry.
+        self.assertEqual(
+            self.vault.resolve(other_session, marker, frozenset({"PERSON"})),
+            "Grace Patient",
+        )
+        self.assertEqual(
+            self.vault.resolve(self.context, marker, frozenset({"PERSON"})),
+            "Ada Patient",
+        )
 
     def test_vault_ttl_expiry(self) -> None:
         marker = self.vault.put(self.context, "PHONE", "+1 212 555 0100", 5)
@@ -64,6 +73,13 @@ class NormalizeVaultSanitizeTests(unittest.TestCase):
         first = self.vault.put(self.context, "PERSON", "Ada Patient", 60)
         second = self.vault.put(self.context, "PERSON", "Ada Patient", 90)
         self.assertEqual(first, second)
+
+    def test_marker_counters_are_per_session_and_token_type(self) -> None:
+        first_person = self.vault.put(self.context, "PERSON", "Ada Patient", 60)
+        first_email = self.vault.put(self.context, "EMAIL", "ada@example.test", 60)
+        second_person = self.vault.put(self.context, "PERSON", "Grace Patient", 60)
+        self.assertEqual((first_person, first_email, second_person),
+                         ("[PERSON_1]", "[EMAIL_1]", "[PERSON_2]"))
 
     def test_concurrent_put_deduplicates_safely(self) -> None:
         barrier = threading.Barrier(8)
@@ -182,6 +198,19 @@ class NormalizeVaultSanitizeTests(unittest.TestCase):
             self.context, self.vault, 60,
         )
         self.assertEqual(result.entity_counts.get("FILE_PATH"), 2)
+
+    def test_trailing_period_is_not_consumed_by_path_or_bearer_match(self) -> None:
+        path = sanitize_text(
+            "Open /var/lib/heimdall/patient.db.", self.context, self.vault, 60
+        )
+        self.assertTrue(path.text.endswith("."), path.text)
+        self.assertEqual(path.entity_counts.get("FILE_PATH"), 1)
+
+        bearer = sanitize_text(
+            "Bearer abc123456789.", self.context, self.vault, 60
+        )
+        self.assertTrue(bearer.text.endswith("."), bearer.text)
+        self.assertEqual(bearer.entity_counts.get("SECRET"), 1)
 
 
 if __name__ == "__main__":

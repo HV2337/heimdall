@@ -30,15 +30,18 @@ from gateway.policy import ROLE_FIELDS
 _MARKER_RE = re.compile(r"\[[A-Z][A-Z0-9_]*_[0-9]+\]")
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+", re.I)
 _API_KEY_RE = re.compile(
-    r"(?i)(?:\bapi[_-]?key\s*[:=]\s*[A-Za-z0-9._~+/=-]{8,}"
-    r"|\bsk-[A-Za-z0-9_-]{12,}|\bAKIA[0-9A-Z]{16}\b)"
+    r"(?i)(?:\bapi[_-]?key\s*[:=]\s*[A-Za-z0-9._~+/=-]{7,}[A-Za-z0-9]"
+    r"|\bsk-[A-Za-z0-9_-]{11,}[A-Za-z0-9]|\bAKIA[0-9A-Z]{16}\b)"
 )
 _SECRET_RE = re.compile(
-    r"(?i)(?:\b(?:bearer|token|access[_-]?token|secret)\s*[:=]?\s*[A-Za-z0-9._~+/=-]{8,}"
+    r"(?i)(?:\b(?:bearer|token|access[_-]?token|secret)\s*[:=]?\s*[A-Za-z0-9._~+/=-]{7,}[A-Za-z0-9]"
     r"|\bpassword\s*[:=]\s*\S+|\b[0-9a-f]{32,}\b"
     r"|\b[A-Za-z0-9+/_-]{32,}={0,2}\b)"
 )
-_PATH_RE = re.compile(r"(?<!\w)(?:[A-Za-z]:[\\/](?:[^\s<>:\"|?*]+[\\/]?)+|/(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+)")
+_PATH_RE = re.compile(
+    r"(?<!\w)(?:[A-Za-z]:[\\/](?:[^\s<>:\"|?*]+[\\/]?)*[A-Za-z0-9._-]*[A-Za-z0-9_-]"
+    r"|/(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]*[A-Za-z0-9_-])(?![A-Za-z0-9_-])"
+)
 _SSN_RE = re.compile(r"(?<![A-Za-z0-9])\d{3}-\d{2}-\d{4}(?![A-Za-z0-9])")
 _AADHAAR_RE = re.compile(r"(?<![A-Za-z0-9])(?:\d{4}[ -]?){2}\d{4}(?![A-Za-z0-9])")
 _PAN_RE = re.compile(r"(?i)(?<![A-Z0-9])[A-Z]{5}\d{4}[A-Z](?![A-Z0-9])")

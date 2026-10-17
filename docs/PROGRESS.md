@@ -42,6 +42,9 @@ Update this file at the end of every task. Keep it short.
 - All new gateway scaffolding modules import successfully.
 - M2 sanitizer hardening covers Indian identity/phone formats, keys/secrets, email, IP addresses, and filesystem paths; VM verification remains pending and M3 remains not started.
 - `python scripts/demo_sanitize.py`: 8 synthetic before/model-input examples displayed; encoded email was blocked before model input.
-- `python -m unittest discover -s tests -v` from the activated Windows venv: 28 tests passed.
+- `python -m unittest discover -s tests -v` from the activated Windows venv: 30 tests passed after marker-counter and punctuation fixes.
 - `bash -n scripts/setup_vm.sh` and `bash -n evidence/capture_platform.sh`: passed.
 - `make test` could not run in the Windows workspace because GNU Make is unavailable.
+- M2 follow-up: markers now use per-session, per-token-type counters (`[TYPE_n]`); HMAC deduplication and session-scoped encrypted entries remain in place. Path and bearer-token scans preserve trailing periods.
+- `python scripts/demo_sanitize.py`: all eight examples displayed correctly; sample 6 preserves the period after `patient.db`, and encoded email is blocked before LLM input.
+- M2 remains pending LinuxONE VM verification; M3 has not started.
