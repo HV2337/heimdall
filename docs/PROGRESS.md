@@ -33,12 +33,12 @@
 - AES-GCM vault runs on s390x with cryptography 41.0.7 from apt.
 - `make test` passes.
 
-## M3 results
+## M3 results — complete
 - `python eval/train_threat.py` trained on 600 generated family-train examples and 1,785 external TRAIN examples; threshold validation used 180 generated examples.
 - Held-out sets: 180 generated family-test examples, 364 external TEST examples, and 41 hand-written examples.
 - `python -m unittest discover -s tests -v`: 38 tests passed, including M3 rule, indirect-injection, obfuscation, sklearn-parity, artifact-validation, and tie-order tests.
 - The deepset dataset was skipped because its card declares conflicting Apache-2.0 and CC-BY-4.0 licenses.
-- M3 was trained on the laptop as requested; LinuxONE VM training and verification have not been run. M4 has not started.
+- M3 is complete. Training and verification were completed on the LinuxONE VM as well as the laptop.
 
 ## M3 classifier improvement ablation
 - M3 complete. Option D is the saved model in `models/threat_model.json`; its threshold is recorded in `models/threat_metrics.json`. D was selected for its lowest observed false-positive rate (tied at 0.0) with the same external-test recall as A (0.8926).
