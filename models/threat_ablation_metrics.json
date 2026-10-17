@@ -1,0 +1,334 @@
+{
+  "A": {
+    "sets": {
+      "external_test": {
+        "classifier": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8925619834710744
+        },
+        "combined": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8925619834710744
+        },
+        "rules": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.23140495867768596
+        }
+      },
+      "family_test": {
+        "classifier": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "combined": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "rules": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8888888888888888
+        }
+      },
+      "hand_written": {
+        "classifier": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.4375
+        },
+        "combined": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.5625
+        },
+        "rules": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.1875
+        }
+      }
+    },
+    "threshold": 0.6191641370787743
+  },
+  "B": {
+    "sets": {
+      "external_test": {
+        "classifier": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.9754098360655737,
+          "precision": 0.6703601108033241,
+          "recall": 1.0
+        },
+        "combined": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.9754098360655737,
+          "precision": 0.6703601108033241,
+          "recall": 1.0
+        },
+        "rules": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.23140495867768596
+        }
+      },
+      "family_test": {
+        "classifier": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.7777777777777778
+        },
+        "combined": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "rules": {
+          "attacks": 90,
+          "benign": 90,
+          "examples": 180,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8888888888888888
+        }
+      },
+      "hand_written": {
+        "classifier": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.08,
+          "precision": 0.8823529411764706,
+          "recall": 0.9375
+        },
+        "combined": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.08,
+          "precision": 0.8823529411764706,
+          "recall": 0.9375
+        },
+        "rules": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.1875
+        }
+      }
+    },
+    "threshold": 0.7244764198848822
+  },
+  "C": {
+    "sets": {
+      "external_test": {
+        "classifier": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8801652892561983
+        },
+        "combined": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8801652892561983
+        },
+        "rules": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.23140495867768596
+        }
+      },
+      "family_test": {
+        "classifier": {
+          "attacks": 90,
+          "benign": 120,
+          "examples": 210,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "combined": {
+          "attacks": 90,
+          "benign": 120,
+          "examples": 210,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "rules": {
+          "attacks": 90,
+          "benign": 120,
+          "examples": 210,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8888888888888888
+        }
+      },
+      "hand_written": {
+        "classifier": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.25
+        },
+        "combined": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.375
+        },
+        "rules": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.1875
+        }
+      }
+    },
+    "threshold": 0.6416763451918075
+  },
+  "D": {
+    "sets": {
+      "external_test": {
+        "classifier": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8925619834710744
+        },
+        "combined": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8925619834710744
+        },
+        "rules": {
+          "attacks": 242,
+          "benign": 122,
+          "examples": 364,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.23140495867768596
+        }
+      },
+      "family_test": {
+        "classifier": {
+          "attacks": 120,
+          "benign": 120,
+          "examples": 240,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.8916666666666667
+        },
+        "combined": {
+          "attacks": 120,
+          "benign": 120,
+          "examples": 240,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.9583333333333334
+        },
+        "rules": {
+          "attacks": 120,
+          "benign": 120,
+          "examples": 240,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.6666666666666666
+        }
+      },
+      "hand_written": {
+        "classifier": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.375
+        },
+        "combined": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.5
+        },
+        "rules": {
+          "attacks": 16,
+          "benign": 25,
+          "examples": 41,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 0.1875
+        }
+      }
+    },
+    "threshold": 0.6226529094999531
+  }
+}

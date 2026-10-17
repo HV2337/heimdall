@@ -20,3 +20,5 @@ Run the Windows developer tasks with the PowerShell helper:
 ```
 
 `test` and `eval` run the standard-library `unittest` suite. `run` starts the FastAPI app on port 8000. The Makefile and Bash setup/evidence scripts remain available for the LinuxONE VM.
+
+Check a prompt with `python scripts/check_prompt.py "prompt text"`, or pipe prompt text to `python scripts/check_prompt.py`.

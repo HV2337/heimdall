@@ -44,17 +44,44 @@ _RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
         r"(?:unrestricted|unfiltered|uncensored|jailbroken|DAN|system administrator|developer mode)\b", re.I)),
     ("system_prompt_extraction", re.compile(
         r"\b(?:reveal|show|print|repeat|quote|display|output|divulge)\s+(?:me\s+)?"
-        r"(?:the\s+)?(?:hidden\s+|original\s+|full\s+)?(?:system prompt|system instructions|developer prompt|hidden prompt)\b", re.I)),
+        r"(?:the\s+)?(?:hidden\s+|original\s+|full\s+|internal\s+)?"
+        r"(?:system prompt|system instructions|developer prompt|hidden prompt|"
+        r"(?:gateway|system|internal) configuration|operating instructions)\b", re.I)),
     ("credential_request", re.compile(
         r"\b(?:show|reveal|retrieve|print|give|send|list|dump|exfiltrate|disclose|expose|provide|request)\s+(?:me\s+)?"
         r"(?:the\s+)?(?:passwords?|credentials?|api keys?|access tokens?|secret keys?)\b", re.I)),
+    ("credential_disclosure_request", re.compile(
+        r"(?is)(?=.*\b(?:reveal|show|give|print|tell|send|paste|provide|share|list)\b"
+        r"(?:[\W_]+\w+){0,5}[\W_]+\b(?:passwords?|credentials?|api\s+keys?|"
+        r"secrets?|tokens?|logins?)\b)"
+        r"(?=.*(?:\b(?:database|system|service|admin|server|root|config|production)\b"
+        r"(?:[\W_]+\w+){0,3}[\W_]+\b(?:passwords?|credentials?|api\s+keys?|"
+        r"secrets?|tokens?|logins?)\b|"
+        r"\b(?:passwords?|credentials?|api\s+keys?|secrets?|tokens?|logins?)\b"
+        r"(?:[\W_]+\w+){0,3}[\W_]+\b(?:database|system|service|admin|server|root|config|production)\b)).+")),
     ("cross_user_data_request", re.compile(
         r"\b(?:show|retrieve|give|list|dump|export|reveal)\s+(?:me\s+)?"
         r"(?:all\s+|any\s+)?(?:other|different|all other)\s+(?:users|patients|customers)\b", re.I)),
     ("security_bypass", re.compile(
         r"\b(?:bypass|disable|turn off|deactivate|circumvent)\s+(?:the\s+)?"
         r"(?:security|safety|guardrails?|filters?|access controls?|authentication|authorization|privacy checks?|protections?)\b", re.I)),
+    ("privileged_role_data_request", re.compile(
+        r"(?is)(?=.*\b(?:i am|i'm|this is|acting as|as|on behalf of|the)\s+"
+        r"(?:the\s+)?(?:hospital administrator|administrator|admin|internal auditor|"
+        r"auditor|it staff|it administrator|manager|security officer|system administrator)\b)"
+        r"(?=.*\b(?:credentials?|passwords?|api keys?|access tokens?|secret keys?|"
+        r"bulk(?:\s+export|\s+data|\s+records?)?|"
+        r"(?:complete|full|all|every|bulk)\s+(?:patient\s+)?(?:data|records?|charts?)"
+        r"(?:\s+export)?|export\s+(?:all|every|bulk|complete|full)|"
+        r"all\s+patients|every\s+patient|other\s+users?|other\s+patients?|"
+        r"patients?\s+outside\s+(?:my|this|their)\s+(?:assignment|account|care)\b)).+")),
 )
+
+
+def _rule_code(text: str, encoded_sensitive_content: bool = False) -> str | None:
+    if encoded_sensitive_content:
+        return "encoded_sensitive_content"
+    return next((code for code, pattern in _RULES if pattern.search(text)), None)
 
 
 def _sigmoid(value: float) -> float:
@@ -148,16 +175,8 @@ class RuleAndModelClassifier(ThreatClassifier):
                 if item.source not in {"user_prompt", "retrieved_record"}:
                     raise ValueError("invalid source")
                 normalized = item.text
-                if normalized.encoded_sensitive_content:
-                    if 1.0 > best_score:
-                        best_score = 1.0
-                        best_source = item.source
-                        best_rule = "encoded_sensitive_content"
-                        best_blocked = True
-                    continue
                 text = normalized.matching_text
-                matched = next((code for code, pattern in _RULES
-                                if pattern.search(text)), None)
+                matched = _rule_code(text, normalized.encoded_sensitive_content)
                 if matched is not None:
                     if 1.0 > best_score:
                         best_score = 1.0

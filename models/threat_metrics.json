@@ -1,47 +1,111 @@
 {
-  "family_held_out": {
-    "examples": 240,
-    "false_positive_rate": 0.0,
-    "precision": 1.0,
-    "recall": 1.0
+  "datasets": {
+    "external_test": {
+      "classifier": {
+        "attacks": 242,
+        "benign": 122,
+        "examples": 364,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.8925619834710744
+      },
+      "combined": {
+        "attacks": 242,
+        "benign": 122,
+        "examples": 364,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.8925619834710744
+      },
+      "rules": {
+        "attacks": 242,
+        "benign": 122,
+        "examples": 364,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.23140495867768596
+      }
+    },
+    "generated_family_held_out": {
+      "classifier": {
+        "attacks": 120,
+        "benign": 120,
+        "examples": 240,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.8916666666666667
+      },
+      "combined": {
+        "attacks": 120,
+        "benign": 120,
+        "examples": 240,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.9583333333333334
+      },
+      "rules": {
+        "attacks": 120,
+        "benign": 120,
+        "examples": 240,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.6666666666666666
+      }
+    },
+    "hand_written": {
+      "classifier": {
+        "attacks": 16,
+        "benign": 25,
+        "examples": 41,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.375
+      },
+      "combined": {
+        "attacks": 16,
+        "benign": 25,
+        "examples": 41,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.5
+      },
+      "rules": {
+        "attacks": 16,
+        "benign": 25,
+        "examples": 41,
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "recall": 0.1875
+      }
+    }
   },
-  "family_test_examples": 240,
   "format": "heimdall-tfidf-logreg-v1",
-  "hand_written_examples": 41,
-  "hand_written_held_out": {
-    "examples": 41,
-    "false_positive_rate": 0.0,
-    "precision": 1.0,
-    "recall": 0.3125
+  "selected_option": "D",
+  "selection_reason": "Option D was chosen because it has the lowest observed false-positive rate (tied at 0.0) and the same external-test recall as option A (0.8926).",
+  "threshold": 0.6226529094999531,
+  "threshold_selection": {
+    "examples": 240,
+    "false_positive_rate_limit": 0.02,
+    "metrics": {
+      "attacks": 120,
+      "benign": 120,
+      "examples": 240,
+      "false_positive_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "source": "generated_validation_families_only"
   },
-  "test_families": [
-    "benign_schedule",
-    "benign_summary",
-    "benign_vitals",
-    "benign_ward",
-    "override_reframe",
-    "secret_fishing",
-    "security_bypass",
-    "security_circumvent"
-  ],
-  "threshold": 0.7238831489117532,
-  "train_families": [
-    "benign_admin",
-    "benign_billing",
-    "benign_documentation",
-    "benign_dose",
-    "benign_labs",
-    "benign_medication",
-    "benign_patient_ed",
-    "benign_prevention",
-    "credential_fishing",
-    "cross_patient",
-    "extract_policy",
-    "extract_system",
-    "indirect_note",
-    "jailbreak_mode",
-    "jailbreak_persona",
-    "override_direct"
-  ],
-  "training_examples": 480
+  "training": {
+    "class_weight": "balanced",
+    "external_train_by_source": {
+      "Lakera/gandalf_ignore_instructions": 761,
+      "jackhhao/jailbreak-classification": 1024
+    },
+    "external_train_examples": 1785,
+    "generated_examples": 720,
+    "generated_validation_examples": 240,
+    "option": "D",
+    "total_examples": 2505
+  }
 }

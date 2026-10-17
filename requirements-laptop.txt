@@ -1,4 +1,5 @@
 -r requirements.txt
+datasets
 numpy
 scipy
 scikit-learn==1.4.*
