@@ -4,6 +4,7 @@ Update this file at the end of every task. Keep it short.
 
 ## Milestones
 - [x] M1 Skeleton, config, mock LLM, auth, policy, data layer, synthetic seed, tests
+- [x] M1.5 shared contracts and module scaffolding; M2 remains not started
 - [ ] M2 normalize, sanitize, vault
 - [ ] M3 threat detection (rules + trained classifier)
 - [ ] M4 LLM adapter, output control, audit, full pipeline
@@ -21,7 +22,7 @@ Update this file at the end of every task. Keep it short.
 
 ## Known issues
 (Record problems and dependency limits on s390x here.)
-- GNU Make is unavailable in the current Windows workspace; the local suite was run with `python -m unittest discover -s tests -v` instead.
+- Windows development uses `scripts/dev.ps1`; Makefile and Bash setup/evidence scripts are retained for LinuxONE/Linux.
 - PyPI has no s390x wheels for SciPy/scikit-learn, and the LinuxONE VM has no `gfortran`; use the Ubuntu apt packages and `make setup-vm`.
 - M3 still needs the VM training script, portable classifier artifact, and measured metrics.
 - The new VM setup and evidence scripts pass Bash syntax checks but have not yet been run on the LinuxONE VM.
@@ -35,6 +36,9 @@ Update this file at the end of every task. Keep it short.
 - Laptop suite: 9 `unittest` tests passed with `python -m unittest discover -s tests -v`.
 
 ## Current task verification
-- `python -m unittest discover -s tests -v`: 9 tests passed.
+- Windows setup and commands are documented in `docs/SETUP.md`; line endings are forced to LF for shell scripts, Makefile, and Python files.
+- `python -m unittest discover -s tests -v`: 11 tests passed (9 original tests plus 2 M1 assignment/config tests).
+- All new gateway scaffolding modules import successfully.
+- M1.5 adds shared contracts and importable module interfaces without pipeline-stage logic; assignment tables, seeded assignments, policy checks, config flags, and ward-to-department mapping are covered by tests.
 - `bash -n scripts/setup_vm.sh` and `bash -n evidence/capture_platform.sh`: passed.
 - `make test` could not run in the Windows workspace because GNU Make is unavailable.

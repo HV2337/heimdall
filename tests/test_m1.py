@@ -8,7 +8,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from gateway.auth import AuthenticationError, authenticate
-from gateway.config import Settings, hash_api_key
+from gateway.config import Settings, WARD_TO_DEPARTMENT, hash_api_key
+from gateway.contracts import RequestContext
 from gateway.data import PatientStore
 from gateway.llm_adapter import MockLLM
 from gateway.main import app, health
@@ -137,6 +138,41 @@ class MilestoneOneTests(unittest.TestCase):
             self.assertEqual(set(records[0]), set(allowed_fields("doctor")))
         finally:
             database.unlink(missing_ok=True)
+
+    def test_seeded_row_assignments_filter_retrieval(self) -> None:
+        database = Path(f".test-{uuid.uuid4().hex}.sqlite3")
+        try:
+            seed(str(database), count=2, seed_value=17)
+            store = PatientStore(str(database))
+            patients = store.list_patients("doctor")
+            patient_id = int(patients[0]["id"])
+            doctor = RequestContext("r1", "doctor-1", "doctor", "s1")
+            nurse = RequestContext("r1", "nurse-1", "nurse", "s1")
+            outsider = RequestContext("r1", "nurse-2", "nurse", "s1")
+            self.assertTrue(store.can_access_patient(doctor, patient_id))
+            self.assertTrue(store.can_access_patient(nurse, patient_id))
+            self.assertFalse(store.can_access_patient(outsider, patient_id))
+            self.assertIsNone(store.get_patient(outsider, patient_id))
+            self.assertEqual(set(store.get_patient(doctor, patient_id) or {}), set(allowed_fields("doctor")))
+            self.assertEqual(set(store.get_scan_identifiers(patient_id)), {
+                patients[0]["name"], patients[0]["phone"]
+            })
+        finally:
+            database.unlink(missing_ok=True)
+
+    def test_config_flags_and_ward_department_mapping(self) -> None:
+        with patch.dict("os.environ", {
+            "HEIMDALL_API_KEYS": "{}", "HEIMDALL_CLINICAL_MODE": "1",
+            "HEIMDALL_DEBUG_TRACE": "1", "HEIMDALL_SESSION_TTL_SECONDS": "42",
+        }, clear=True):
+            settings = Settings.from_env()
+        self.assertTrue(settings.clinical_mode)
+        self.assertTrue(settings.debug_trace)
+        self.assertEqual(settings.session_ttl_seconds, 42)
+        self.assertEqual(WARD_TO_DEPARTMENT["General"], "General Medicine")
+        with patch.dict("os.environ", {"HEIMDALL_CLINICAL_MODE": "yes"}, clear=True):
+            with self.assertRaises(ValueError):
+                Settings.from_env()
 
 
 if __name__ == "__main__":

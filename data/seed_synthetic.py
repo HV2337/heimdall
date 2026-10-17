@@ -18,7 +18,7 @@ def seed(database_path: str, count: int = 12, seed_value: int = 2026) -> None:
     wards = ["Cardiology", "General", "Neurology", "Pediatrics"]
     diagnoses = ["Routine follow-up", "Seasonal allergy", "Hypertension", "Migraine"]
     for index in range(count):
-        store.add_patient({
+        patient_id = store.add_patient({
             "name": fake.name(),
             "phone": f"+91-90000-{index:05d}",
             "dob": fake.date_of_birth(minimum_age=18, maximum_age=90).isoformat(),
@@ -30,6 +30,10 @@ def seed(database_path: str, count: int = 12, seed_value: int = 2026) -> None:
             "notes": "Synthetic record for demonstration.",
             "created_at": "2026-01-15T10:00:00Z",
         })
+        store.assign_patient("doctor-1", "doctor", patient_id)
+        store.assign_patient("billing-1", "billing_clerk", patient_id)
+    for ward in wards:
+        store.assign_nurse_ward("nurse-1", ward)
 
 
 def main() -> None:

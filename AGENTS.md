@@ -34,7 +34,7 @@ Team: Aegis. Event code: SSF2026. Target platform: IBM LinuxONE Community Cloud 
 - Use only synthetic data (Faker) and properly licensed open datasets.
 
 ### Process
-- Keep `main` runnable. `make test` must pass before any commit to `main`.
+- Keep `main` runnable. Run `make test` on LinuxONE/Linux; on Windows run `./scripts/dev.ps1 test` before any commit to `main`.
 - Small commits with clear messages. Do not rewrite files you were not asked to touch.
 - Add or update tests with every change.
 - Use Python's standard-library `unittest` for tests (`python -m unittest discover -s tests -v`); do not use pytest.
