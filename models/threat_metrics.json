@@ -1,13 +1,13 @@
 {
   "dataset_file_hashes": {
-    "eval/data/external/jackhhao_jailbreak_classification_test.jsonl": "0e49ab74789772706fd5b7e95ce5e6eafd04630bbf48dba6d8cbc859a53a060f",
-    "eval/data/external/jackhhao_jailbreak_classification_train.jsonl": "53bc8003190c7f784d59c463023e496c7d015ace9da63d3d5eed85de076f78af",
-    "eval/data/external/lakera_gandalf_ignore_instructions_test.jsonl": "27e7abbbf6b85901db0f787308415c4fc1e44d3b4d1f7daf1a900adcd430ce7c",
-    "eval/data/external/lakera_gandalf_ignore_instructions_train.jsonl": "884c2e3f3fcd29d0d17d73addf588b85e737e5534cd7b90364ba746ae9778c76"
+    "eval/data/external/jackhhao_jailbreak_classification_test.jsonl": "c0d3c5faff87243522027dd34a91b9ce5a9ed3ad8381bc3d1d5b740c0d504179",
+    "eval/data/external/jackhhao_jailbreak_classification_train.jsonl": "d9c44c561fdf88df844e4d556bc108a08cba0d52c8dc6e63594d6f68611a7940",
+    "eval/data/external/lakera_gandalf_ignore_instructions_test.jsonl": "206b64748bc5ae0748322bdfd20444ab4c88a28a4b6a1a491722732a14e349cd",
+    "eval/data/external/lakera_gandalf_ignore_instructions_train.jsonl": "06b634854631b0bb94923fdba7d004a581c60b051780b46cc656134f4342121a"
   },
   "datasets": {
     "external_test": {
-      "classifier": {
+      "classifier_only": {
         "attacks": 242,
         "benign": 122,
         "examples": 364,
@@ -23,17 +23,17 @@
         "precision": 1.0,
         "recall": 0.8925619834710744
       },
-      "rules": {
+      "rules_only": {
         "attacks": 242,
         "benign": 122,
         "examples": 364,
         "false_positive_rate": 0.0,
         "precision": 1.0,
-        "recall": 0.23140495867768596
+        "recall": 0.2396694214876033
       }
     },
     "generated_family_held_out": {
-      "classifier": {
+      "classifier_only": {
         "attacks": 120,
         "benign": 120,
         "examples": 240,
@@ -49,7 +49,7 @@
         "precision": 1.0,
         "recall": 0.9583333333333334
       },
-      "rules": {
+      "rules_only": {
         "attacks": 120,
         "benign": 120,
         "examples": 240,
@@ -59,7 +59,7 @@
       }
     },
     "hand_written": {
-      "classifier": {
+      "classifier_only": {
         "attacks": 16,
         "benign": 25,
         "examples": 41,
@@ -75,7 +75,7 @@
         "precision": 1.0,
         "recall": 0.5
       },
-      "rules": {
+      "rules_only": {
         "attacks": 16,
         "benign": 25,
         "examples": 41,
@@ -88,12 +88,19 @@
   "format": "heimdall-tfidf-logreg-v1",
   "generated_examples_sha256": "e982c738000c73b38088068b47d4524a95f4f36ac96b0d3e66461ef6bb49f3ef",
   "generated_source_sha256": "3fa3c56cb061071c28f078983cad6ca2e95bd3a6a2471a445522ff724f2d7a83",
+  "hand_written_cases": {
+    "blocked_benign_cases_by_layer": {},
+    "missed_attack_cases_by_layer": {
+      "classifier_only": 10,
+      "combined": 8,
+      "rules_only": 13
+    }
+  },
   "option": "D",
-  "platform_uname_m": "AMD64",
-  "scikit_learn_version": "1.4.2",
+  "platform_uname_m": "s390x",
+  "scikit_learn_version": "1.4.1.post1",
   "selected_option": "D",
-  "selection_reason": "Option D was chosen because it has the lowest observed false-positive rate (tied at 0.0) and the same external-test recall as option A (0.8926).",
-  "threshold": 0.6226529094999531,
+  "threshold": 0.6226529094999615,
   "threshold_selection": {
     "examples": 240,
     "false_positive_rate_limit": 0.02,
