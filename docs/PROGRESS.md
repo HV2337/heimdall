@@ -5,7 +5,7 @@ Update this file at the end of every task. Keep it short.
 ## Milestones
 - [x] M1 Skeleton, config, mock LLM, auth, policy, data layer, synthetic seed, tests
 - [x] M1.5 shared contracts and module scaffolding (LinuxONE VM verified; user-confirmed)
-- [ ] M2 normalize, sanitize, vault
+- [ ] M2 normalize, sanitize, vault (next; not started)
 - [ ] M3 threat detection (rules + trained classifier)
 - [ ] M4 LLM adapter, output control, audit, full pipeline
 - [ ] M5 eval harness, baselines, results table
