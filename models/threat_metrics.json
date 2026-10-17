@@ -1,0 +1,47 @@
+{
+  "family_held_out": {
+    "examples": 240,
+    "false_positive_rate": 0.0,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "family_test_examples": 240,
+  "format": "heimdall-tfidf-logreg-v1",
+  "hand_written_examples": 41,
+  "hand_written_held_out": {
+    "examples": 41,
+    "false_positive_rate": 0.0,
+    "precision": 1.0,
+    "recall": 0.3125
+  },
+  "test_families": [
+    "benign_schedule",
+    "benign_summary",
+    "benign_vitals",
+    "benign_ward",
+    "override_reframe",
+    "secret_fishing",
+    "security_bypass",
+    "security_circumvent"
+  ],
+  "threshold": 0.7238831489117532,
+  "train_families": [
+    "benign_admin",
+    "benign_billing",
+    "benign_documentation",
+    "benign_dose",
+    "benign_labs",
+    "benign_medication",
+    "benign_patient_ed",
+    "benign_prevention",
+    "credential_fishing",
+    "cross_patient",
+    "extract_policy",
+    "extract_system",
+    "indirect_note",
+    "jailbreak_mode",
+    "jailbreak_persona",
+    "override_direct"
+  ],
+  "training_examples": 480
+}
