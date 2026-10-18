@@ -3,7 +3,13 @@
 **Aegis_IBM Z Datathon 2026 Project** | Event code: SSF2026 | Theme: AI Secured, Innovation Without Exposure
 
 Team Aegis: Hareesh V, Muhammed Shifas NK, Devi Vrinda A, Rithun K P, Shyaam Menon.
-Output control and audit logging were contributed by Muhammed Shifas NK (PR #1).
+
+## Submission
+
+- Video (under 3 min): <VIDEO LINK>
+- Slide deck (PDF): [docs/Heimdall_aegis_submission_ibmz2026.pdf]
+(docs/Heimdall_aegis_submission_ibmz2026.pdf)
+- Team Aegis · IBM Z Datathon 2026 (SSF2026)
 
 ## Differences from our original abstract
 
