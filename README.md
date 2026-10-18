@@ -25,6 +25,8 @@ Hospitals, banks and colleges want AI assistants over their records, but putting
 
 ![Heimdall architecture](docs/images/heimdall_architecture.png)
 
+![Demo output](docs/images/demo.png)
+
 Heimdall is a gateway that sits between a user and the model. Every request passes the same stages, and any failure stops the request (it fails closed).
 
 ```mermaid
