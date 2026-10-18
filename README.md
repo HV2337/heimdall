@@ -6,7 +6,7 @@ Team Aegis: Hareesh V, Muhammed Shifas NK, Devi Vrinda A, Rithun K P, Shyaam Men
 
 ## Submission
 
-- Video (under 3 min): <VIDEO LINK>
+- Video (under 3 min): [Watch the demo video](https://drive.google.com/file/d/1fFQWQgKjU-lVw-nHNmSyuBDeKH-w3m7s/view)
 - Slide deck (PDF): [Heimdall Aegis submission](docs/Heimdall_aegis_submission_ibmz2026.pdf)
 - Team Aegis · IBM Z Datathon 2026 (SSF2026)
 
