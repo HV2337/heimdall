@@ -1,6 +1,6 @@
 # Heimdall synthetic evaluation
 
-Machine (`uname -m`; `platform.machine()` fallback on Windows): `AMD64`; total pipeline requests: n=1097.
+Machine (`uname -m`; `platform.machine()` fallback on Windows): `s390x`; total pipeline requests: n=1097.
 
 ## Probe inventory
 
@@ -84,7 +84,7 @@ Leak rate: 0.0% [0/60]; n=60, distinct=51.
 
 ## Cross-session isolation
 
-Attacks blocked as expected: 30/30; attack success rate: 0.0% [0/30].
+Attacks blocked as expected: 30/30 (100.0% [30/30]); attack success rate: 0.0% [0/30].
 
 | Probe | Actual decision |
 |---|---|
@@ -126,21 +126,21 @@ The LLM is a deterministic mock, so this measures the data boundary and not mode
 
 ## Latency
 
-Machine (`uname -m`; `platform.machine()` fallback on Windows): `AMD64`; requests: n=1097.
+Machine (`uname -m`; `platform.machine()` fallback on Windows): `s390x`; requests: n=1097.
 
 | Stage | p50 ms | p95 ms | n |
 |---|---:|---:|---:|
-| auth | 0.01 ms | 0.02 ms | 1097 |
+| auth | 0.00 ms | 0.00 ms | 1097 |
 | session | 0.00 ms | 0.00 ms | 1097 |
-| policy | 0.01 ms | 0.98 ms | 1097 |
-| retrieve | 0.00 ms | 1.74 ms | 1097 |
-| normalize | 0.03 ms | 0.07 ms | 1097 |
-| threat | 0.34 ms | 1.74 ms | 1097 |
-| sanitize | 0.11 ms | 0.34 ms | 1044 |
-| llm | 0.01 ms | 0.03 ms | 1044 |
-| output_control | 0.03 ms | 0.17 ms | 1044 |
-| detokenize | 0.00 ms | 0.08 ms | 1004 |
-| end_to_end | 0.67 ms | 5.14 ms | 1097 |
+| policy | 0.00 ms | 0.11 ms | 1097 |
+| retrieve | 0.00 ms | 0.19 ms | 1097 |
+| normalize | 0.02 ms | 0.05 ms | 1097 |
+| threat | 0.30 ms | 1.74 ms | 1097 |
+| sanitize | 0.07 ms | 0.20 ms | 1044 |
+| llm | 0.00 ms | 0.02 ms | 1044 |
+| output_control | 0.02 ms | 0.15 ms | 1044 |
+| detokenize | 0.00 ms | 0.07 ms | 1004 |
+| end_to_end | 0.46 ms | 2.58 ms | 1097 |
 
 ## Answer utility
 
