@@ -193,14 +193,20 @@ def _write_report(output_dir: Path, report: dict[str, Any], markdown: str,
                   *, final: bool = False) -> tuple[Path, Path, Path | None]:
     output_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    stem = f"final-threat-{stamp}" if final else stamp
+    stem = f"final-{stamp}" if final else stamp
     md_path = output_dir / f"{stem}.md"
     json_path = output_dir / f"{stem}.json"
     md_path.write_text(markdown, encoding="utf-8", newline="\n")
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
                          encoding="utf-8", newline="\n")
     latest = None
-    if not final:
+    if final:
+        latest = output_dir / "final-latest.md"
+        latest.write_text(markdown, encoding="utf-8", newline="\n")
+        (output_dir / "final-latest.json").write_text(
+            json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8", newline="\n")
+    else:
         latest = output_dir / "latest.md"
         latest.write_text(markdown, encoding="utf-8", newline="\n")
         (output_dir / "latest.json").write_text(
@@ -212,13 +218,22 @@ def _write_report(output_dir: Path, report: dict[str, Any], markdown: str,
 def _render_report(report: Mapping[str, Any], misses: list[dict[str, Any]], *,
                    final_label: str | None = None) -> str:
     if final_label:
-        return ("# Threat evaluation\n\n"
-                f"**{final_label}**\n\n"
-                "| Set | n | Precision | Recall | FPR |\n|---|---:|---:|---:|---:|\n"
-                f"| Classifier | {report['final_threat']['n']} | "
-                f"{_ratio(report['final_threat']['tp'], report['final_threat']['tp'] + report['final_threat']['fp'])} | "
-                f"{_ratio(report['final_threat']['tp'], report['final_threat']['tp'] + report['final_threat']['fn'])} | "
-                f"{_ratio(report['final_threat']['negative_n'] - report['final_threat']['tn'], report['final_threat']['negative_n'])} |\n")
+        final = report["final_threat"]
+        lines = ["# Final threat evaluation", "", f"**{final_label}**", "",
+                 f"Counts: total n={final['n']}; attack n={final['attack_n']}; benign n={final['benign_n']}.", "",
+                 "| Layer | Precision | Recall | FPR |", "|---|---:|---:|---:|"]
+        for layer in ("rules_only", "classifier_only", "combined"):
+            metric = final["metrics"][layer]
+            lines.append(f"| {layer} | {_ratio(metric['tp'], metric['tp'] + metric['fp'])} | "
+                         f"{_ratio(metric['tp'], metric['tp'] + metric['fn'])} | "
+                         f"{_ratio(metric['negative_n'] - metric['tn'], metric['negative_n'])} |")
+        lines.extend(["", "| Text | Expected decision | Actual decision | Layer | Score |",
+                      "|---|---|---|---|---:|"])
+        for item in final["prompts"]:
+            text = item["text"].replace("|", "\\|").replace("\n", " ")
+            lines.append(f"| {text} | {item['expected']} | {item['actual']} | "
+                         f"{item['layer']} | {item['score']!r} |")
+        return "\n".join(lines) + "\n"
     machine_label = "Machine (`uname -m`; `platform.machine()` fallback on Windows)"
     sections = ["# Heimdall synthetic evaluation", "", f"{machine_label}: `{report['machine']}`; total pipeline requests: n={report['request_count']}.", ""]
     sections.extend(["## Probe inventory", "", "| File | n | Distinct probes |", "|---|---:|---:|"])
@@ -694,26 +709,41 @@ def run_evaluation(data_dir: str | Path = DATA_DIR,
     return report
 
 
-def _label_is_attack(row: Mapping[str, Any]) -> bool:
-    if row.get("expected_decision") in {"block", "allow"}:
-        return row["expected_decision"] == "block"
-    label = row.get("label")
-    if isinstance(label, bool):
-        return label
-    if isinstance(label, (int, float)):
-        return label == 1
-    if isinstance(label, str):
-        return label.strip().lower() in {"1", "attack", "malicious", "block", "injection", "unsafe"}
-    raise ValueError("final threat row needs a recognizable label")
+def _load_final_threat_file(path: Path) -> list[dict[str, str]]:
+    """Load strict line-oriented ATTACK/BENIGN prompts with source line diagnostics."""
+    rows: list[dict[str, str]] = []
+    try:
+        content = path.read_text(encoding="utf-8")
+    except UnicodeError as exc:
+        raise ValueError("final threat file must be UTF-8") from exc
+    for line_number, line in enumerate(content.splitlines(), 1):
+        if not line.strip():
+            continue
+        if line.startswith("ATTACK: "):
+            label, text = "attack", line[len("ATTACK: "):].strip()
+        elif line.startswith("BENIGN: "):
+            label, text = "benign", line[len("BENIGN: "):].strip()
+        else:
+            raise ValueError(
+                f"invalid final threat fixture at line {line_number}: expected 'ATTACK: <text>' or 'BENIGN: <text>'"
+            )
+        if not text:
+            raise ValueError(f"invalid final threat fixture at line {line_number}: prompt text is empty")
+        rows.append({"text": text, "label": label})
+    if not rows:
+        raise ValueError("final threat fixture contains no prompts")
+    return rows
 
 
-def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULTS_DIR) -> dict[str, Any]:
-    """Read and evaluate a requested final set once; refuses the prohibited fixture."""
+def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULTS_DIR,
+                               *, force: bool = False) -> dict[str, Any]:
+    """Evaluate the supplied final prompts once and save a separate final report."""
     source = Path(path)
-    if source.name.lower() == "final_threat_test.txt":
-        raise ValueError("the protected final threat fixture is not available to this runner")
-    # One read operation for the supplied set, retained in memory for inference/reporting.
-    rows = _load_jsonl(source)
+    destination = Path(output_dir)
+    if (destination / "final-latest.md").exists() and not force:
+        raise FileExistsError("final-latest.md already exists; pass --force to overwrite it")
+    # A single read; the protected fixture is handled only by the program when explicitly invoked.
+    rows = _load_final_threat_file(source)
     with tempfile.TemporaryDirectory(dir=".") as temporary:
         db_path = Path(temporary) / "final-eval.sqlite3"
         seed(str(db_path), count=12, seed_value=2026)
@@ -725,17 +755,61 @@ def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULT
         audit = _MemoryAudit()
         dependencies = replace(build_dependencies(settings), audit=audit)
         session_id = dependencies.sessions.create(user_id, dependencies.session_ttl_seconds).session_id
-        actual, expected = [], [_label_is_attack(row) for row in rows]
+        expected = [row["label"] == "attack" for row in rows]
+        rules_predictions: list[bool] = []
+        classifier_predictions: list[bool] = []
+        combined_predictions: list[bool] = []
+        prompt_details: list[dict[str, Any]] = []
         for row in rows:
+            normalized = normalize_text(row["text"])
+            rules_result = detect_rules(
+                normalized.matching_text,
+                encoded_sensitive_content=normalized.encoded_sensitive_content,
+            )
+            score = dependencies.classifier._probability(normalized.matching_text)
+            classifier_blocked = score >= dependencies.classifier.model.threshold
             result = run_pipeline(PipelineRequest(raw_key, session_id, row["text"], ()), dependencies)
             event = audit.events[-1]
-            actual.append(result.status_code == 403 and event.blocking_stage == "threat")
-        negative_predictions = [prediction for prediction, label in zip(actual, expected) if not label]
-        metric = _metric_row(actual, expected, negative_predictions)
-    report = {"final_threat": {**metric, "n": len(rows)}, "source_name": source.name}
-    label = f"final held-out set, n={len(rows)}, written by the assistant, not used for tuning"
+            combined_blocked = result.status_code == 403 and event.blocking_stage == "threat"
+            rules_predictions.append(rules_result.blocked)
+            classifier_predictions.append(classifier_blocked)
+            combined_predictions.append(combined_blocked)
+            if rules_result.blocked:
+                layer = f"rules:{rules_result.rule_code}"
+                combined_score = 1.0
+            elif classifier_blocked:
+                layer = "classifier:classifier_threshold"
+                combined_score = score
+            else:
+                layer = "allow"
+                combined_score = score
+            prompt_details.append({
+                "text": row["text"],
+                "expected": "block" if expected[-1] else "allow",
+                "actual": "block" if combined_blocked else "allow",
+                "layer": layer,
+                "score": combined_score,
+            })
+        benign_labels = [not label for label in expected]
+        metrics = {
+            "rules_only": _metric_row(rules_predictions, expected, [p for p, b in zip(rules_predictions, benign_labels) if b]),
+            "classifier_only": _metric_row(classifier_predictions, expected, [p for p, b in zip(classifier_predictions, benign_labels) if b]),
+            "combined": _metric_row(combined_predictions, expected, [p for p, b in zip(combined_predictions, benign_labels) if b]),
+        }
+    report = {
+        "final_threat": {
+            "n": len(rows),
+            "attack_n": sum(expected),
+            "benign_n": len(expected) - sum(expected),
+            "metrics": metrics,
+            "prompts": prompt_details,
+        },
+        "source_name": source.name,
+    }
+    label = (f"final held-out set, n={len(rows)}, written by the assistant, not used for tuning. "
+             "The file has been committed in the repository since M3 and the coding assistant was instructed not to open it.")
     markdown = _render_report(report, [], final_label=label)
-    _write_report(Path(output_dir), report, markdown, final=True)
+    _write_report(destination, report, markdown, final=True)
     return report
 
 
@@ -744,14 +818,17 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
     parser.add_argument("--output-dir", type=Path, default=RESULTS_DIR)
     parser.add_argument("--final-threat-file", type=Path)
+    parser.add_argument("--force", action="store_true", help="overwrite final-latest.md for final evaluation")
     args = parser.parse_args()
     if args.final_threat_file:
-        report = evaluate_final_threat_file(args.final_threat_file, args.output_dir)
+        report = evaluate_final_threat_file(args.final_threat_file, args.output_dir, force=args.force)
         metric = report["final_threat"]
-        print(f"final threat set: n={metric['n']}, "
-              f"P={_ratio(metric['tp'], metric['tp'] + metric['fp'])}, "
-              f"R={_ratio(metric['tp'], metric['tp'] + metric['fn'])}, "
-              f"FPR={_ratio(metric['negative_n'] - metric['tn'], metric['negative_n'])}")
+        print(f"final threat set: n={metric['n']} (attack={metric['attack_n']}, benign={metric['benign_n']})")
+        for layer, values in metric["metrics"].items():
+            print(f"{layer}: P={_ratio(values['tp'], values['tp'] + values['fp'])}, "
+                  f"R={_ratio(values['tp'], values['tp'] + values['fn'])}, "
+                  f"FPR={_ratio(values['negative_n'] - values['tn'], values['negative_n'])}")
+        print(f"results: {args.output_dir / 'final-latest.md'}")
         return
     report = run_evaluation(args.data_dir, args.output_dir)
     for name, count in report["dataset_counts"].items():
