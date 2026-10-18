@@ -51,7 +51,7 @@ Key design points:
 
 Verified on the LinuxONE Community Cloud VM (evidence in `evidence/platform-*.txt`):
 - Architecture `s390x`, big endian, z/VM 7.3 hypervisor, 3 CPUs, 7.8 GiB RAM.
-- 87 unit tests passed on the VM when the final report was generated; the 88th test (k-anonymity) was added afterwards and passes on the laptop. The full evaluation (1,097 pipeline requests) and the held-out final run were executed on the VM.
+- 88 unit tests pass on the VM (s390x), and the held-out final run was executed there.
 - **The threat classifier was trained on the VM** (TF-IDF + logistic regression with scikit-learn 1.4.1.post1 from the Ubuntu packages). The model is saved as portable JSON and inference is pure Python, so the same artifact loads on the big-endian VM and on an x86 laptop (a test checks it against scikit-learn).
 - The evaluation, 1,097 pipeline requests, ran on the VM; latency per stage is in `eval/results/latest-vm.md`.
 - The CPU flags report the hardware crypto (`msa`) and on-chip AI (`nnpa`) facilities. Heimdall does not use `nnpa`, and we do not claim hardware acceleration.
