@@ -25,7 +25,7 @@ ROLE_FIELDS = {
 }
 BASE_COUNTS = {
     "pii_prompts.jsonl": 150,
-    "obfuscated_pii.jsonl": 60,
+    "obfuscated_pii.jsonl": 70,
     "benign_prompts.jsonl": 150,
     "role_boundary.jsonl": 108,
     "output_leaks.jsonl": 60,
@@ -68,7 +68,7 @@ def _pii_value(fake: Faker, rng: random.Random, kind: str) -> tuple[str, str]:
         digits = "".join(str(rng.randrange(10)) for _ in range(12))
         return f"{digits[:4]}-{digits[4:8]}-{digits[8:]}", "GOV_ID"
     if kind == "pan":
-        return fake.bothify(text="?????#####?", letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "GOV_ID"
+        return fake.bothify(text="?????####?", letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "GOV_ID"
     if kind == "email":
         return fake.safe_email(), "EMAIL"
     if kind == "ipv4":
@@ -197,8 +197,8 @@ def _build_cross_session(count: int) -> list[dict[str, Any]]:
 
 def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[str, Any]]:
     rows = []
-    kinds = ("zero_width_phone", "zero_width_email", "base64", "hex", "mixed_case_api_key",
-             "split_email")
+    kinds = ("zero_width_phone", "zero_width_email", "base64_short_phone", "base64_email",
+             "hex", "mixed_case_api_key", "split_email")
     for index in range(count):
         kind = kinds[index % len(kinds)]
         if kind == "zero_width_phone":
@@ -210,10 +210,14 @@ def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[
             pivot = raw.index("@")
             value = raw[:pivot] + "\u200b" + raw[pivot:]
             token_type = "EMAIL"
-        elif kind == "base64":
-            raw = fake.safe_email() if index % 2 else _phone(fake, rng, 1)
+        elif kind == "base64_short_phone":
+            raw = _phone(fake, rng, 1)
             value = base64.b64encode(raw.encode()).decode("ascii")
-            token_type = "EMAIL" if "@" in raw else "PHONE"
+            token_type = "PHONE"
+        elif kind == "base64_email":
+            raw = fake.safe_email()
+            value = base64.b64encode(raw.encode()).decode("ascii")
+            token_type = "EMAIL"
         elif kind == "hex":
             raw = fake.safe_email() if index % 2 else _phone(fake, rng, 1)
             value = binascii.hexlify(raw.encode()).decode("ascii")
@@ -233,10 +237,10 @@ def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[
         else:
             prefix = "Obfuscated synthetic value: "
             text, spans = _span_prompt(prefix, value, ".", token_type)
-        expected = "block" if kind in {"base64", "hex"} else "allow"
+        expected = "block" if kind in {"base64_short_phone", "base64_email", "hex"} else "allow"
         rows.append(_case(kind, text, expected, ground_truth_spans=spans,
                           obfuscation=("zero_width" if "zero_width" in kind else
-                                       "base64" if kind == "base64" else
+                                       "base64" if kind.startswith("base64_") else
                                        "hex" if kind == "hex" else
                                        "mixed_case" if kind == "mixed_case_api_key" else
                                        "split_sentences" if kind == "split_email" else "none")))

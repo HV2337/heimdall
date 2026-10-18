@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -30,6 +31,32 @@ class EvaluationDataTests(unittest.TestCase):
         obfuscated_kinds = {row["kind"] for row in datasets["obfuscated_pii.jsonl"]}
         self.assertIn("mixed_case_api_key", obfuscated_kinds)
         self.assertNotIn("mixed_case_phone", obfuscated_kinds)
+        self.assertIn("base64_short_phone", obfuscated_kinds)
+        self.assertIn("base64_email", obfuscated_kinds)
+
+    def test_every_pan_probe_matches_valid_ten_character_format(self) -> None:
+        datasets = build_datasets(731)
+        pan_spans = [span["text"]
+                     for row in datasets["pii_prompts.jsonl"] if row.get("kind") == "pan"
+                     for span in row.get("ground_truth_spans", [])]
+        self.assertTrue(pan_spans)
+        for value in pan_spans:
+            with self.subTest(value=value):
+                self.assertRegex(value, re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]$"))
+
+    def test_base64_probe_kinds_have_expected_encoded_lengths(self) -> None:
+        datasets = build_datasets(731)
+        probes = datasets["obfuscated_pii.jsonl"]
+        short_phones = [row for row in probes if row["kind"] == "base64_short_phone"]
+        emails = [row for row in probes if row["kind"] == "base64_email"]
+        self.assertTrue(short_phones)
+        self.assertTrue(emails)
+        for row in short_phones:
+            encoded = row["ground_truth_spans"][0]["text"]
+            self.assertLess(len(encoded.rstrip("=")), 16)
+        for row in emails:
+            encoded = row["ground_truth_spans"][0]["text"]
+            self.assertGreater(len(encoded.rstrip("=")), 16)
 
     def test_generated_spans_match_text_and_expected_decisions_exist(self) -> None:
         datasets = build_datasets(731)

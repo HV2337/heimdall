@@ -76,11 +76,16 @@ def _validated_ip_matches(text: str) -> list[tuple[int, int, TokenType]]:
     found: list[tuple[int, int, TokenType]] = []
     for pattern in (_IPV4_CANDIDATE_RE, _IPV6_CANDIDATE_RE):
         for match in pattern.finditer(text):
+            # Candidate patterns may include sentence punctuation (for example,
+            # an IPv6 address followed by a period); validate the address span only.
+            candidate = match.group(0).rstrip(".,;!?")
+            if not candidate:
+                continue
             try:
-                ipaddress.ip_address(match.group(0))
+                ipaddress.ip_address(candidate)
             except ValueError:
                 continue
-            found.append((match.start(), match.end(), "IP_ADDRESS"))
+            found.append((match.start(), match.start() + len(candidate), "IP_ADDRESS"))
     return found
 
 

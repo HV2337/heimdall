@@ -27,15 +27,25 @@ from gateway.config import Settings
 from gateway.contracts import PipelineRequest, RequestContext, ScannableText
 from gateway.main import build_dependencies, run_pipeline
 from gateway.normalize import normalize_text
+from gateway.sanitize import sanitize_text
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 ROLE_NAMES = ("doctor", "nurse", "billing_clerk")
 MARKER_RE = re.compile(r"\[[A-Z][A-Z0-9_]*_[0-9]+\]")
 CANARY_RE = re.compile(r"CANARY:\s*(HEIMDALL_CANARY_[A-Fa-f0-9]+)")
+MISSED_FULL_IPV6 = (
+    "eb8a:1321:df11:5aaa:5ec6:18b4:b6b8:6ac2",
+    "8bce:6cd0:77e9:3bc1:dced:e855:5eb0:1065",
+    "7601:72d8:d6a7:99a0:220a:6f17:5221:de0b",
+)
+OBFUSCATED_DESCRIPTIONS = {
+    "base64_short_phone": "short phone; 15 non-padding chars, below 16-char decode minimum (known limitation)",
+    "base64_email": "encoded email longer than 16 chars",
+}
 _REQUIRED_SECTIONS = (
     "PII detection", "Injection detection", "Unauthorized disclosure",
     "Output leakage", "Cross-session isolation", "End-to-end exposure after a missed injection",
-    "Latency", "Answer utility",
+    "IPv6 sanitizer check", "Corrections after first run", "Latency", "Answer utility",
     "Limitations of this evaluation",
 )
 
@@ -86,17 +96,12 @@ def _load_datasets(data_dir: Path) -> dict[str, list[dict[str, Any]]]:
     return {name: _load_jsonl(data_dir / name) for name in names}
 
 
-def _number(value: float) -> str:
-    """Use Python's shortest round-trip representation without rounding up."""
-    return repr(value)
-
-
 def _ratio(numerator: int, denominator: int) -> str:
     """Format a measured ratio as a percentage and exact count pair."""
     if denominator == 0:
         return f"n/a [{numerator}/{denominator}]"
     percentage = 100.0 * numerator / denominator
-    return f"{_number(percentage)}% [{numerator}/{denominator}]"
+    return f"{percentage:.1f}% [{numerator}/{denominator}]"
 
 
 def _distinct_texts(rows: Iterable[Mapping[str, Any]]) -> int:
@@ -144,6 +149,24 @@ def _role_expected_answer(answer: str | None) -> dict[str, Any] | None:
         return value[0] if isinstance(value, list) and value and isinstance(value[0], dict) else None
     except (ValueError, IndexError, TypeError):
         return None
+
+
+def _run_ipv6_diagnostics(dependencies: Any) -> list[dict[str, str]]:
+    """Run the three previously missed full IPv6 values alone and in sentences."""
+    checks = []
+    for index, value in enumerate(MISSED_FULL_IPV6):
+        results = []
+        for suffix, text in (("bare", value), ("sentence", f"IPv6 address: {value}.")):
+            context = RequestContext(f"ipv6-check-{index}-{suffix}", "doctor-1", "doctor",
+                                     f"ipv6-check-{index}-{suffix}")
+            sanitized = sanitize_text(text, context, dependencies.vault,
+                                      dependencies.token_ttl_seconds)
+            count = int(sanitized.entity_counts.get("IP_ADDRESS", 0))
+            results.append(("tokenized as IP_ADDRESS" if count == 1 else "not tokenized")
+                           + ("; period preserved" if suffix == "sentence" and text.endswith(".")
+                              and sanitized.text.endswith(".") else ""))
+        checks.append({"value": value, "bare": results[0], "sentence": results[1]})
+    return checks
 
 
 def _metric_row(actual: list[bool], positives: list[bool], negatives: list[bool]) -> dict[str, Any]:
@@ -211,15 +234,26 @@ def _render_report(report: Mapping[str, Any], misses: list[dict[str, Any]], *,
                 f"{_ratio(metric['negative_n'] - metric['tn'], metric['negative_n'])} |"
             )
     sections.extend(["", "Each obfuscated kind is one pattern repeated with different values. Split-email probes have empty ground-truth spans; excluded from recall and reported separately as a known limitation.", ""])
-    sections.extend(["| Obfuscated kind | n; distinct | Heimdall P / R / FPR | Regex proxy P / R / FPR |", "|---|---:|---|---|"])
+    sections.extend(["| Obfuscated kind | Description | n; distinct | Heimdall P / R / FPR | Regex proxy P / R / FPR |", "|---|---|---:|---|---|"])
     for kind, metrics in report["obfuscated_by_kind"].items():
-        sections.append(f"| {kind} | {metrics['heimdall']['probe_n']}; {report['distinct_counts']['obfuscated_pii.jsonl'][kind]} | {_metric_display(metrics['heimdall'])} | {_metric_display(metrics['regex_proxy'])} |")
-    sections.append(f"| split_email (empty spans; excluded from recall) | {report['split_email']['n']}; {report['distinct_counts']['obfuscated_pii.jsonl'].get('split_email', 0)} | Known limitation; no ground-truth span | Known limitation; no ground-truth span |")
+        description = OBFUSCATED_DESCRIPTIONS.get(kind, "one pattern repeated with different values")
+        sections.append(f"| {kind} | {description} | {metrics['heimdall']['probe_n']}; {report['distinct_counts']['obfuscated_pii.jsonl'][kind]} | {_metric_display(metrics['heimdall'])} | {_metric_display(metrics['regex_proxy'])} |")
+    sections.append(f"| split_email (empty spans; excluded from recall) | empty spans | {report['split_email']['n']}; {report['distinct_counts']['obfuscated_pii.jsonl'].get('split_email', 0)} | Known limitation; no ground-truth span | Known limitation; no ground-truth span |")
     sections.extend(["", "### Plain PII false negatives", "", "| System | Kind | Expected span text |", "|---|---|---|"])
     for system in ("heimdall", "regex_proxy"):
         for miss in report["plain_pii_misses"][system]:
             escaped = miss["text"].replace("|", "\\|").replace("\n", " ")
             sections.append(f"| {system} | {miss['kind']} | `{escaped}` |")
+
+    sections.extend(["", "### IPv6 sanitizer check", "",
+                     "The three full-form values below were tried alone and in sentences ending with a period. Bare values sanitized; before the fix, sentence forms were missed because the candidate regex included the terminal period and address validation rejected the combined string. The scanner now trims trailing sentence punctuation before validation.",
+                     "", "| IPv6 value | Bare | In sentence |", "|---|---|---|"])
+    for check in report["ipv6_diagnostics"]:
+        sections.append(f"| `{check['value']}` | {check['bare']} | {check['sentence']} |")
+
+    sections.extend(["", "## Corrections after first run", "",
+                     "1. Fixed PAN probe generation from 11 characters (5 letters, 5 digits, 1 letter) to valid 10-character PANs (5 letters, 4 digits, 1 letter). The original plain PII recall was 88.0% [132/150].",
+                     "2. Split the original base64 kind into `base64_short_phone` and `base64_email`. The original base64 result was 0/10; the short phone pattern remains a known limitation because it is below the decoder's 16-character minimum, while email encodings are measured separately.", ""])
 
     sections.extend(["", "## Injection detection", "", 
                      f"Positive set: `injection_prompts.jsonl` (n={report['dataset_counts']['injection_prompts.jsonl']}, distinct={report['distinct_counts']['injection_prompts.jsonl']['all']}); "
@@ -233,7 +267,7 @@ def _render_report(report: Mapping[str, Any], misses: list[dict[str, Any]], *,
     for role, value in report["unauthorized_disclosure"].items():
         sections.append(f"| {role} | {_ratio(value['unauthorized'], value['n'])} | {value['n']}; {report['distinct_counts']['role_boundary.jsonl'].get(role, 0)} distinct |")
     sections.extend(["", "## Output leakage", "", f"Leak rate: {_ratio(report['output_leak']['leaks'], report['output_leak']['n'])}; n={report['output_leak']['n']}, distinct={report['distinct_counts']['output_leaks.jsonl']['all']}.", "",
-                     "## Cross-session isolation", "", f"Attacks blocked as expected: {report['cross_session']['blocked_as_expected']}/{report['cross_session']['n']}; attack success rate: {_ratio(report['cross_session']['attack_successes'], report['cross_session']['n'])}.", "",
+                     "## Cross-session isolation", "", f"Attacks blocked as expected: {report['cross_session']['blocked_as_expected']}/{report['cross_session']['n']} ({_ratio(report['cross_session']['blocked_as_expected'], report['cross_session']['n'])}); attack success rate: {_ratio(report['cross_session']['attack_successes'], report['cross_session']['n'])}.", "",
                      "| Probe | Actual decision |", "|---|---|"])
     for item in report["cross_session"]["decisions"]:
         escaped = item["text"].replace("|", "\\|").replace("\n", " ")
@@ -262,7 +296,7 @@ def _render_report(report: Mapping[str, Any], misses: list[dict[str, Any]], *,
         sections.append("No decision misses in the evaluated decision-labeled probes.")
     sections.extend(["", "## Limitations of this evaluation", "",
                      "Probes are synthetic and made by the same team and tool as the system. The LLM is a deterministic mock. Some probe kinds are repeated patterns. The data is small.",
-                     "The generated base64 phone values have 15 non-padding characters, below the normalizer's 16-character candidate minimum, so those encoded values are not decoded or flagged.", ""])
+                     "The generated `base64_short_phone` values have 15 non-padding characters, below the normalizer's 16-character candidate minimum, so those encoded values are not decoded or flagged.", ""])
     return "\n".join(sections)
 
 
@@ -631,6 +665,7 @@ def run_evaluation(data_dir: str | Path = DATA_DIR,
             for name, rows in datasets.items()
         },
         "plain_pii_misses": plain_pii_misses,
+        "ipv6_diagnostics": _run_ipv6_diagnostics(dependencies),
         "pii": {"plain": plain_group, "obfuscated": obfuscated_group},
         "obfuscated_by_kind": obfuscated_kind_metrics,
         "split_email": {"n": len(split_email), "excluded_from_recall": True,

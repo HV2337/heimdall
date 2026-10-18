@@ -19,8 +19,8 @@ class EvaluationRunnerTests(unittest.TestCase):
             "pii_prompts.jsonl": full["pii_prompts.jsonl"][:2],
             "obfuscated_pii.jsonl": [
                 next(row for row in full["obfuscated_pii.jsonl"] if row["kind"] == kind)
-                for kind in ("zero_width_phone", "zero_width_email", "base64", "hex",
-                             "mixed_case_api_key", "split_email")
+                for kind in ("zero_width_phone", "zero_width_email", "base64_short_phone",
+                             "base64_email", "hex", "mixed_case_api_key", "split_email")
             ],
             "benign_prompts.jsonl": full["benign_prompts.jsonl"][:2],
             "role_boundary.jsonl": [
@@ -44,10 +44,15 @@ class EvaluationRunnerTests(unittest.TestCase):
                 with self.subTest(section=section):
                     self.assertIn(section, markdown)
             self.assertEqual(set(report["obfuscated_by_kind"]), {
-                "zero_width_phone", "zero_width_email", "base64", "hex", "mixed_case_api_key",
+                "zero_width_phone", "zero_width_email", "base64_short_phone", "base64_email",
+                "hex", "mixed_case_api_key",
             })
             self.assertEqual(report["split_email"]["n"], 1)
-            base_requests = 2 + 2 + 6 + 2 + 2 + 3 + 6 + 1 + 6
+            self.assertEqual(len(report["ipv6_diagnostics"]), 3)
+            self.assertTrue(all("tokenized as IP_ADDRESS" in item["bare"]
+                                and "tokenized as IP_ADDRESS" in item["sentence"]
+                                for item in report["ipv6_diagnostics"]))
+            base_requests = 2 + 2 + 7 + 2 + 2 + 3 + 6 + 1 + 6
             self.assertEqual(report["request_count"],
                              base_requests + report["missed_injection_exposure"]["prompt_n"] * 3)
             self.assertEqual(report["cross_session"]["n"], 1)
@@ -59,6 +64,7 @@ class EvaluationRunnerTests(unittest.TestCase):
     def test_ratio_format_handles_zero_denominator(self) -> None:
         self.assertEqual(_ratio(0, 0), "n/a [0/0]")
         self.assertEqual(_ratio(1, 4), "25.0% [1/4]")
+        self.assertEqual(_ratio(1, 3), "33.3% [1/3]")
 
     def test_baselines_have_no_gateway_imports(self) -> None:
         source = Path("eval/baselines.py").read_text(encoding="utf-8")

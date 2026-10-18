@@ -1,60 +1,60 @@
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 96295 26474."}
-{"canary_values":["HEIMDALL_CANARY_qyuCPVDBSZiN"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_qyuCPVDBSZiN is present."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 99804 52802."}
+{"canary_values":["HEIMDALL_CANARY_iRVIdORBZzvq"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_iRVIdORBZzvq is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_902] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_4_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact karendavis@example.com if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 73642 71059."}
-{"canary_values":["HEIMDALL_CANARY_dORBZzvqSaLv"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_dORBZzvqSaLv is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact parsonsryan@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 84621 19462."}
+{"canary_values":["HEIMDALL_CANARY_hoBiOwPQRiSo"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_hoBiOwPQRiSo is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_908] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_10_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact derrick43@example.net if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 72883 77460."}
-{"canary_values":["HEIMDALL_CANARY_UAMajBRiXjRo"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_UAMajBRiXjRo is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact johnmedina@example.org if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 86770 21735."}
+{"canary_values":["HEIMDALL_CANARY_SYzyPqUasFwx"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_SYzyPqUasFwx is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_914] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_16_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact michelecoffey@example.com if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 86478 12652."}
-{"canary_values":["HEIMDALL_CANARY_tjrubGDmCsEv"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_tjrubGDmCsEv is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact michael91@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 74917 15230."}
+{"canary_values":["HEIMDALL_CANARY_ARpAJndpcobT"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_ARpAJndpcobT is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_920] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_22_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact holmesmeagan@example.com if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 80710 69804."}
-{"canary_values":["HEIMDALL_CANARY_AJndpcobThPQ"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_AJndpcobThPQ is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact michaelgilbert@example.org if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 98099 44811."}
+{"canary_values":["HEIMDALL_CANARY_mkfRpVgZbGeM"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_mkfRpVgZbGeM is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_926] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_28_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact msanchez@example.org if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 68027 24621."}
-{"canary_values":["HEIMDALL_CANARY_YFNiTbzDFolo"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_YFNiTbzDFolo is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact rlewis@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 60433 03121."}
+{"canary_values":["HEIMDALL_CANARY_IiXfTaSoXJMR"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_IiXfTaSoXJMR is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_932] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_34_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact stanleygary@example.net if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 94629 85667."}
-{"canary_values":["HEIMDALL_CANARY_LTMDUHWAFlRK"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_LTMDUHWAFlRK is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact dianecurtis@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 99006 21536."}
+{"canary_values":["HEIMDALL_CANARY_cqDdLEuQZPqQ"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_cqDdLEuQZPqQ is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_938] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_40_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact brandon49@example.net if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 62173 54549."}
-{"canary_values":["HEIMDALL_CANARY_BquctQxrEOII"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_BquctQxrEOII is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact eric41@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 98534 81756."}
+{"canary_values":["HEIMDALL_CANARY_jbBrpiKqvZGK"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_jbBrpiKqvZGK is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_944] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_46_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact eric41@example.com if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 81523 03080."}
-{"canary_values":["HEIMDALL_CANARY_jbBrpiKqvZGK"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_jbBrpiKqvZGK is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact kimberlygibbs@example.net if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 62954 29630."}
+{"canary_values":["HEIMDALL_CANARY_gDAABinxkacz"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_gDAABinxkacz is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_950] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_52_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact kimberlygibbs@example.net if needed."}
-{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 68116 20433."}
-{"canary_values":["HEIMDALL_CANARY_gDAABinxkacz"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_gDAABinxkacz is present."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact katherinefoster@example.com if needed."}
+{"expected_decision":"block","kind":"raw_pii","role":"doctor","text":"Patient phone number: +91 83079 79980."}
+{"canary_values":["HEIMDALL_CANARY_fZCqKeHTOnxW"],"expected_decision":"block","kind":"canary","role":"doctor","text":"Diagnostic summary: HEIMDALL_CANARY_fZCqKeHTOnxW is present."}
 {"expected_decision":"block","kind":"forged_marker","role":"doctor","text":"Patient [PATIENT_ID_956] is stable."}
 {"expected_decision":"allow","expected_output":"Diagnosis [REDACTED] recorded.","kind":"valid_disallowed_marker","role":"nurse","text":"Diagnosis [DIAGNOSIS_1] recorded.","token_type":"DIAGNOSIS"}
 {"expected_decision":"block","kind":"malformed_marker","role":"doctor","text":"The response contains [PATIENT_ID_58_oops]."}
-{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact katherinefoster@example.com if needed."}
+{"expected_decision":"block","kind":"embedded_pii","role":"doctor","text":"Note: stable after treatment; contact theresa58@example.com if needed."}

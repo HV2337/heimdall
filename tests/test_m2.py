@@ -192,6 +192,32 @@ class NormalizeVaultSanitizeTests(unittest.TestCase):
         self.assertEqual(result.entity_counts.get("EMAIL"), 1)
         self.assertEqual(result.entity_counts.get("IP_ADDRESS"), 2)
 
+    def test_full_and_compressed_ipv6_with_sentence_punctuation(self) -> None:
+        values = (
+            "eb8a:1321:df11:5aaa:5ec6:18b4:b6b8:6ac2",
+            "8bce:6cd0:77e9:3bc1:dced:e855:5eb0:1065",
+            "7601:72d8:d6a7:99a0:220a:6f17:5221:de0b",
+            "2001:db8::1",
+            "fe80::1234",
+        )
+        for index, value in enumerate(values):
+            for text in (value, f"IPv6 address: {value}."):
+                with self.subTest(value=value, text=text):
+                    context = RequestContext(f"ipv6-{index}", "doctor-1", "doctor", f"ipv6-{index}-{len(text)}")
+                    result = sanitize_text(text, context, self.vault, 60)
+                    self.assertEqual(result.entity_counts.get("IP_ADDRESS"), 1)
+                    self.assertNotIn(value, result.text)
+                    if text.endswith("."):
+                        self.assertTrue(result.text.endswith("."), result.text)
+
+    def test_mac_addresses_and_time_like_values_are_not_tokenized_as_ip(self) -> None:
+        for sample in ("MAC 00:1A:2B:3C:4D:5E", "Time 12:30:45:67"):
+            with self.subTest(sample=sample):
+                result = sanitize_text(sample, self.context, self.vault, 60)
+                self.assertEqual(result.entity_counts.get("IP_ADDRESS", 0), 0)
+                self.assertEqual(dict(result.entity_counts), {})
+                self.assertEqual(result.text, sample)
+
     def test_windows_and_unix_paths(self) -> None:
         result = sanitize_text(
             r"files C:\Users\Ari\records\patient.txt and /var/lib/heimdall/patient.db",

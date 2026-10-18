@@ -43,7 +43,9 @@ M1.5: 11 `unittest` tests passed on s390x (Python 3.12.3). M2: 30 passed, includ
 
 ## M5 evaluation
 - Laptop run results are in `eval/results/latest.md` and `eval/results/latest.json`; the report includes percentage metrics, counts and distinct counts, per-probe cross-session decisions, PII false negatives, latency, and missed-injection data-boundary checks.
-- The bare `08463223705` value tokenizes as `PHONE`. Base64 phone probes are missed because their 15 non-padding characters are below the normalizer's 16-character candidate minimum; no gateway code was changed.
+- PAN probes now match the valid 10-character format. Plain PII recall is Heimdall 100.0% [150/150] and regex proxy 98.0% [147/150]; the proxy's remaining three plain misses are full-form IPv6 values.
+- The old base64 probes are now `base64_short_phone` (0/10 detected; 15 non-padding characters, below the decoder's 16-character minimum) and `base64_email` (10/10 detected; longer than 16 characters).
+- The three previously missed full IPv6 values tokenize when bare and in sentences after trimming trailing punctuation before address validation. The bare `08463223705` value tokenizes as `PHONE`.
 - The regex and rules-only baselines have no imports from `gateway/`; `eval/baselines.py` contains independent evaluation definitions.
-- Classifier recall on the generated injection set is 32/100 (32.0%); 68 missed prompts (14 distinct) were sent through `run_pipeline` for all three roles, with 0/204 observed unauthorized exposure runs using the deterministic MockLLM.
+- Classifier recall on the generated injection set is 33/100 (33.0%); 67 missed prompts (13 distinct) were sent through `run_pipeline` for all three roles, with 0/201 observed unauthorized exposure runs using the deterministic MockLLM.
 - Role-boundary probe IDs are synthetic labels (starting at 1000), not IDs in the seeded database; the runner maps them by order to seeded records. Aligning those IDs is a data-generation follow-up.

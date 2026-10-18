@@ -1,128 +1,124 @@
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-09-27 at 13:00 in clinic room 131."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 128 is reserved for 15:00; the appointment date is 2026-12-16."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2026-01-19; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 898 visits and 111 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 177 visits and 217 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 5 mg at 19:00; review response in 12 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 498 is reserved for 13:45; the appointment date is 2024-12-09."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2026-09-30; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 104 bpm, and oxygen saturation 97 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 90 bpm, and oxygen saturation 96 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 17 has 17 beds available for the 19:00 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 105 bpm, and oxygen saturation 98 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 494 is reserved for 09:15; the appointment date is 2025-02-08."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 14 has 26 beds available for the 18:30 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 24 has 28 beds available for the 18:30 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 551 visits and 325 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 36.8 C, pulse 56 bpm, and oxygen saturation 94 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 431 visits and 268 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2025-04-02; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 488 is reserved for 11:00; the appointment date is 2026-05-17."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 6 has 29 beds available for the 15:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 421 visits and 48 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2027-03-10; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2026-04-04; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 12 mg at 15:00; review response in 24 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 25 mg at 09:45; review response in 6 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 14:00 with the plan documented yesterday."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2027-10-30; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 26 has 21 beds available for the 11:30 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 212 is reserved for 15:15; the appointment date is 2027-03-10."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 18 has 25 beds available for the 17:30 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 171 is reserved for 07:00; the appointment date is 2028-05-05."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 09:15 with the plan documented yesterday."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 36.8 C, pulse 57 bpm, and oxygen saturation 96 percent."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 311 is reserved for 14:30; the appointment date is 2027-10-30."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 57 bpm, and oxygen saturation 98 percent."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 09:15; review response in 12 hours."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 3 has 1 beds available for the 11:15 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 5 mg dose at 19:30 with the plan documented yesterday."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 98 bpm, and oxygen saturation 94 percent."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 25 mg dose at 07:45 with the plan documented yesterday."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 662 visits and 359 calendar days."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 562 visits and 308 calendar days."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 83 bpm, and oxygen saturation 99 percent."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 18:45; review response in 6 hours."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 29 has 7 beds available for the 19:30 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 08:30 with the plan documented yesterday."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 30 has 28 beds available for the 08:00 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 32 has 1 beds available for the 14:15 appointment round."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 5 mg at 15:00; review response in 2 hours."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 411 visits and 22 calendar days."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 160 is reserved for 08:00; the appointment date is 2026-04-08."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 12 mg dose at 11:00 with the plan documented yesterday."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 65 bpm, and oxygen saturation 95 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 4 has 10 beds available for the 19:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 221 is reserved for 08:00; the appointment date is 2027-05-23."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 117 is reserved for 17:15; the appointment date is 2028-08-05."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 221 is reserved for 08:00; the appointment date is 2027-11-29."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 117 is reserved for 17:15; the appointment date is 2025-12-15."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 12 has 8 beds available for the 13:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 224 is reserved for 08:15; the appointment date is 2028-05-02."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2025-10-30; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 224 is reserved for 08:15; the appointment date is 2025-02-13."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2027-09-02; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 110 bpm, and oxygen saturation 99 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 68 bpm, and oxygen saturation 96 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 25 mg dose at 10:30 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 37 has 30 beds available for the 14:30 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 37 has 26 beds available for the 12:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2025-09-09; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2024-11-21; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 11:00; review response in 6 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 399 is reserved for 07:45; the appointment date is 2026-12-03."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 399 is reserved for 07:45; the appointment date is 2028-01-26."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 25 mg at 17:00; review response in 6 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2026-04-08; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2027-10-23; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2027-01-26; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2025-05-28; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 16:30; review response in 2 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 8 has 28 beds available for the 08:30 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2027-11-29; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2028-06-22; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 15:15; review response in 24 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 18:30; review response in 6 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 18:45; review response in 24 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 34 has 8 beds available for the 14:45 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 13:45 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 16:30; review response in 12 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 175 is reserved for 14:00; the appointment date is 2025-02-27."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 175 is reserved for 14:00; the appointment date is 2028-01-27."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 5 mg dose at 09:00 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 12:15; review response in 2 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2024-11-21 at 16:45 in clinic room 163."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2024-11-08 at 16:45 in clinic room 163."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 100 bpm, and oxygen saturation 98 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 16:00; review response in 12 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 3 has 1 beds available for the 07:45 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 742 visits and 288 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 102 visits and 28 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 9 has 30 beds available for the 18:00 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2024-11-21 at 18:15 in clinic room 183."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-07-18 at 18:15 in clinic room 183."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 89 bpm, and oxygen saturation 100 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 25 mg at 12:00; review response in 6 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 37 has 26 beds available for the 07:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2027-05-01 at 14:00 in clinic room 105."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-02-05 at 14:00 in clinic room 105."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 27 has 22 beds available for the 15:00 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 74 bpm, and oxygen saturation 95 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 17 has 29 beds available for the 13:00 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 12 mg at 09:15; review response in 6 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 25 mg at 15:30; review response in 24 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 387 is reserved for 14:45; the appointment date is 2026-09-25."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 208 is reserved for 09:00; the appointment date is 2024-11-08."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 387 is reserved for 14:45; the appointment date is 2026-08-11."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 208 is reserved for 09:00; the appointment date is 2028-04-01."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 86 visits and 344 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 4 has 23 beds available for the 16:15 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2025-09-19 at 15:15 in clinic room 492."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-08-12 at 15:15 in clinic room 492."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 853 visits and 310 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 332 visits and 353 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 18:15; review response in 12 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 7 has 6 beds available for the 10:15 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2028-08-08; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 294 is reserved for 09:15; the appointment date is 2027-10-23."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-05-18 at 11:45 in clinic room 336."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2026-09-25; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 294 is reserved for 09:15; the appointment date is 2027-09-27."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-02-23 at 11:45 in clinic room 336."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 9 has 13 beds available for the 13:30 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 5 mg at 19:00; review response in 12 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2028-08-20; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2025-05-11; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 20 has 1 beds available for the 19:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 468 is reserved for 08:45; the appointment date is 2026-08-13."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 468 is reserved for 08:45; the appointment date is 2026-05-19."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 12 mg dose at 08:15 with the plan documented yesterday."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2026-08-11; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2028-04-13; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 92 bpm, and oxygen saturation 99 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2025-05-01; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $125.00, due on 2026-03-31; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 284 visits and 331 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-08-12 at 10:00 in clinic room 208."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2026-05-15; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-01-07 at 10:00 in clinic room 208."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2028-08-15; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 104 visits and 332 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 660 visits and 232 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 9 has 21 beds available for the 08:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-09-25 at 12:15 in clinic room 386."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2025-02-05 at 12:15 in clinic room 386."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 17:30 with the plan documented yesterday."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-02-23 at 09:00 in clinic room 239."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-10-08 at 09:00 in clinic room 239."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 27 has 22 beds available for the 19:00 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 78 bpm, and oxygen saturation 96 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 40 mg dose at 07:30 with the plan documented yesterday."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2025-12-16; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2027-03-24; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 2.5 mg at 14:30; review response in 24 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 453 is reserved for 14:00; the appointment date is 2026-12-01."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2028-04-13; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 453 is reserved for 14:00; the appointment date is 2027-11-21."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2026-02-21; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 74 bpm, and oxygen saturation 99 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-03-31 at 18:15 in clinic room 242."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-01-30 at 18:15 in clinic room 242."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 18:45; review response in 12 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-01-07 at 18:15 in clinic room 124."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2025-04-05 at 18:15 in clinic room 124."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 12 has 2 beds available for the 19:45 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 35 has 19 beds available for the 15:15 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 274 is reserved for 14:30; the appointment date is 2025-12-03."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 274 is reserved for 14:30; the appointment date is 2026-05-27."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 4 has 16 beds available for the 17:45 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2025-02-05; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $1200.00, due on 2028-04-19; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 12 mg at 19:00; review response in 12 hours."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 38.0 C, pulse 101 bpm, and oxygen saturation 100 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-12-06 at 10:00 in clinic room 202."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-09-08 at 19:00 in clinic room 334."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-03-25 at 10:00 in clinic room 202."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2025-09-07 at 19:00 in clinic room 334."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 803 visits and 332 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 37.1 C, pulse 102 bpm, and oxygen saturation 98 percent."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 12 mg at 08:30; review response in 2 hours."}
@@ -130,21 +126,25 @@
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 12 mg dose at 10:00 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 382 visits and 61 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Temperature is 36.8 C, pulse 72 bpm, and oxygen saturation 96 percent."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2025-02-13 at 12:15 in clinic room 351."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2024-12-30 at 12:15 in clinic room 351."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 10 has 14 beds available for the 18:00 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 419 visits and 88 calendar days."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 40 mg at 17:15; review response in 12 hours."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2026-05-27; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $640.00, due on 2028-09-14; confirm the billing category."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 10 has 18 beds available for the 18:15 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 2.5 mg dose at 14:15 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The 2026 quality review covers 39 visits and 74 calendar days."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-12-10 at 10:00 in clinic room 289."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2028-09-09 at 10:00 in clinic room 289."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 2 has 14 beds available for the 07:00 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 12 mg dose at 10:00 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 13 has 10 beds available for the 13:00 appointment round."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-05-29 at 17:30 in clinic room 265."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2028-03-08; confirm the billing category."}
-{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 441 is reserved for 16:00; the appointment date is 2027-10-27."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2027-08-31 at 17:30 in clinic room 265."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Invoice total is $48.00, due on 2026-11-04; confirm the billing category."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 441 is reserved for 16:00; the appointment date is 2027-01-25."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Please compare the 5 mg dose at 16:00 with the plan documented yesterday."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Ward 32 has 22 beds available for the 10:45 appointment round."}
 {"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 12 mg at 10:45; review response in 6 hours."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"The patient received 25 mg at 09:30; review response in 6 hours."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-04-30 at 19:30 in clinic room 278."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Schedule follow-up on 2026-07-22 at 14:30 in clinic room 489."}
+{"expected_decision":"allow","ground_truth_spans":[],"kind":"benign_healthcare","text":"Room 244 is reserved for 17:00; the appointment date is 2026-06-06."}
