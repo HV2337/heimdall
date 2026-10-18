@@ -227,12 +227,24 @@ def _render_report(report: Mapping[str, Any], misses: list[dict[str, Any]], *,
             lines.append(f"| {layer} | {_ratio(metric['tp'], metric['tp'] + metric['fp'])} | "
                          f"{_ratio(metric['tp'], metric['tp'] + metric['fn'])} | "
                          f"{_ratio(metric['negative_n'] - metric['tn'], metric['negative_n'])} |")
-        lines.extend(["", "| Text | Expected decision | Actual decision | Layer | Score |",
-                      "|---|---|---|---|---:|"])
+        lines.extend(["", "| Text | Expected decision | Actual decision | Result | Layer | Score |",
+                      "|---|---|---|---|---|---:|"])
         for item in final["prompts"]:
             text = item["text"].replace("|", "\\|").replace("\n", " ")
             lines.append(f"| {text} | {item['expected']} | {item['actual']} | "
+                         f"{'correct' if item['correct'] else 'wrong'} | "
                          f"{item['layer']} | {item['score']!r} |")
+        misses = [item for item in final["prompts"] if not item["correct"]]
+        lines.extend(["", "## Misses", ""])
+        if misses:
+            lines.extend(["| Text | Expected decision | Actual decision | Layer | Score |",
+                          "|---|---|---|---|---:|"])
+            for item in misses:
+                text = item["text"].replace("|", "\\|").replace("\n", " ")
+                lines.append(f"| {text} | {item['expected']} | {item['actual']} | "
+                             f"{item['layer']} | {item['score']!r} |")
+        else:
+            lines.append("None.")
         return "\n".join(lines) + "\n"
     machine_label = "Machine (`uname -m`; `platform.machine()` fallback on Windows)"
     sections = ["# Heimdall synthetic evaluation", "", f"{machine_label}: `{report['machine']}`; total pipeline requests: n={report['request_count']}.", ""]
@@ -760,7 +772,7 @@ def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULT
         classifier_predictions: list[bool] = []
         combined_predictions: list[bool] = []
         prompt_details: list[dict[str, Any]] = []
-        for row in rows:
+        for row, expected_attack in zip(rows, expected):
             normalized = normalize_text(row["text"])
             rules_result = detect_rules(
                 normalized.matching_text,
@@ -785,8 +797,10 @@ def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULT
                 combined_score = score
             prompt_details.append({
                 "text": row["text"],
-                "expected": "block" if expected[-1] else "allow",
+                "expected": "block" if expected_attack else "allow",
                 "actual": "block" if combined_blocked else "allow",
+                "correct": ("block" if combined_blocked else "allow")
+                           == ("block" if expected_attack else "allow"),
                 "layer": layer,
                 "score": combined_score,
             })
@@ -806,8 +820,10 @@ def evaluate_final_threat_file(path: str | Path, output_dir: str | Path = RESULT
         },
         "source_name": source.name,
     }
-    label = (f"final held-out set, n={len(rows)}, written by the assistant, not used for tuning. "
-             "The file has been committed in the repository since M3 and the coding assistant was instructed not to open it.")
+    label = (f"final held-out set, n={len(rows)}, written by a separate AI chat assistant "
+             "(not the coding assistant) and not used for tuning. The file has been committed "
+             "in the repository since M3 and the coding assistant was instructed not to open it. "
+             "The set is small and two attack styles are similar to the development prompts.")
     markdown = _render_report(report, [], final_label=label)
     _write_report(destination, report, markdown, final=True)
     return report
