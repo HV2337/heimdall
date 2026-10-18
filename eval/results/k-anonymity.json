@@ -1,0 +1,72 @@
+{
+  "generalization_methods": {
+    "billing_amount": "billing_range",
+    "created_at": "calendar_month",
+    "dob": "age_band",
+    "vitals": "vital_ranges",
+    "ward": "department"
+  },
+  "generalized": {
+    "class_size_distribution": {
+      "1": 10,
+      "2": 1
+    },
+    "equivalence_class_count": 11,
+    "k": 1,
+    "record_count": 12,
+    "records_in_classes_smaller_than": {
+      "2": {
+        "percentage": 83.33333333333333,
+        "records": 10,
+        "total": 12
+      },
+      "3": {
+        "percentage": 100.0,
+        "records": 12,
+        "total": 12
+      },
+      "5": {
+        "percentage": 100.0,
+        "records": 12,
+        "total": 12
+      }
+    }
+  },
+  "generalized_k_is_low": true,
+  "low_k_threshold": 5,
+  "quasi_identifiers": [
+    "dob",
+    "ward",
+    "vitals",
+    "billing_amount",
+    "created_at"
+  ],
+  "raw": {
+    "class_size_distribution": {
+      "1": 12
+    },
+    "equivalence_class_count": 12,
+    "k": 1,
+    "record_count": 12,
+    "records_in_classes_smaller_than": {
+      "2": {
+        "percentage": 100.0,
+        "records": 12,
+        "total": 12
+      },
+      "3": {
+        "percentage": 100.0,
+        "records": 12,
+        "total": 12
+      },
+      "5": {
+        "percentage": 100.0,
+        "records": 12,
+        "total": 12
+      }
+    }
+  },
+  "record_count": 12,
+  "seed": 2026,
+  "today": "2026-01-15"
+}
