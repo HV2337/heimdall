@@ -197,7 +197,7 @@ def _build_cross_session(count: int) -> list[dict[str, Any]]:
 
 def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[str, Any]]:
     rows = []
-    kinds = ("zero_width_phone", "zero_width_email", "base64", "hex", "mixed_case_phone",
+    kinds = ("zero_width_phone", "zero_width_email", "base64", "hex", "mixed_case_api_key",
              "split_email")
     for index in range(count):
         kind = kinds[index % len(kinds)]
@@ -218,7 +218,7 @@ def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[
             raw = fake.safe_email() if index % 2 else _phone(fake, rng, 1)
             value = binascii.hexlify(raw.encode()).decode("ascii")
             token_type = "EMAIL" if "@" in raw else "PHONE"
-        elif kind == "mixed_case_phone":
+        elif kind == "mixed_case_api_key":
             raw = "api_key=" + fake.sha256(raw_output=False)
             value = "aPi_KeY=" + raw.split("=", 1)[1]
             token_type = "API_KEY"
@@ -238,7 +238,7 @@ def _build_obfuscated(fake: Faker, rng: random.Random, count: int) -> list[dict[
                           obfuscation=("zero_width" if "zero_width" in kind else
                                        "base64" if kind == "base64" else
                                        "hex" if kind == "hex" else
-                                       "mixed_case" if kind == "mixed_case_phone" else
+                                       "mixed_case" if kind == "mixed_case_api_key" else
                                        "split_sentences" if kind == "split_email" else "none")))
     return rows
 

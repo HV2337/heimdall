@@ -27,6 +27,9 @@ class EvaluationDataTests(unittest.TestCase):
             {row["obfuscation"] for row in datasets["injection_prompts.jsonl"]},
             {"plain", "obfuscated"},
         )
+        obfuscated_kinds = {row["kind"] for row in datasets["obfuscated_pii.jsonl"]}
+        self.assertIn("mixed_case_api_key", obfuscated_kinds)
+        self.assertNotIn("mixed_case_phone", obfuscated_kinds)
 
     def test_generated_spans_match_text_and_expected_decisions_exist(self) -> None:
         datasets = build_datasets(731)

@@ -6,7 +6,7 @@
 - [x] M2
 - [x] M3
 - [x] M4
-- [ ] M5 evaluation — in progress (scaled deterministic synthetic probes and baselines; runner not started)
+- [ ] M5 evaluation — in progress (scaled synthetic probes, baselines, and runner implemented; k-anonymity remains)
 - [ ] M6
 
 ## M4
@@ -40,3 +40,10 @@ M1.5: 11 `unittest` tests passed on s390x (Python 3.12.3). M2: 30 passed, includ
 - Sessions are lost on restart (single process).
 - Doctors can see `billing_amount` by policy.
 - The demo LLM is a mock.
+
+## M5 evaluation
+- Laptop run results are in `eval/results/latest.md` and `eval/results/latest.json`; the report includes percentage metrics, counts and distinct counts, per-probe cross-session decisions, PII false negatives, latency, and missed-injection data-boundary checks.
+- The bare `08463223705` value tokenizes as `PHONE`. Base64 phone probes are missed because their 15 non-padding characters are below the normalizer's 16-character candidate minimum; no gateway code was changed.
+- The regex and rules-only baselines have no imports from `gateway/`; `eval/baselines.py` contains independent evaluation definitions.
+- Classifier recall on the generated injection set is 32/100 (32.0%); 68 missed prompts (14 distinct) were sent through `run_pipeline` for all three roles, with 0/204 observed unauthorized exposure runs using the deterministic MockLLM.
+- Role-boundary probe IDs are synthetic labels (starting at 1000), not IDs in the seeded database; the runner maps them by order to seeded records. Aligning those IDs is a data-generation follow-up.

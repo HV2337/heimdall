@@ -6,7 +6,6 @@ import ipaddress
 import re
 from dataclasses import dataclass
 
-from gateway.threat import _rule_code
 
 _PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("API_KEY", re.compile(r"(?i)\bapi[_-]?key\s*[:=]\s*[A-Za-z0-9._~+/=-]{7,}[A-Za-z0-9]")),
@@ -40,6 +39,51 @@ class MaskResult:
 class RuleResult:
     blocked: bool
     rule_code: str | None
+
+
+# Independent evaluation copy of the deterministic public rule definitions.
+# This module intentionally has no imports from gateway/.
+_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("instruction_override", re.compile(
+        r"\b(?:ignore|disregard|forget|override)\s+(?:all\s+)?(?:the\s+)?"
+        r"(?:previous|prior|above|earlier)\s+(?:system\s+)?(?:instructions?|prompts?|directives?|rules?)\b", re.I)),
+    ("role_jailbreak", re.compile(
+        r"\b(?:you are now|act as|pretend to be|roleplay as)\s+(?:an?\s+)?"
+        r"(?:unrestricted|unfiltered|uncensored|jailbroken|DAN|system administrator|developer mode)\b", re.I)),
+    ("system_prompt_extraction", re.compile(
+        r"\b(?:reveal|show|print|repeat|quote|display|output|divulge)\s+(?:me\s+)?"
+        r"(?:the\s+)?(?:hidden\s+|original\s+|full\s+|internal\s+)?"
+        r"(?:system prompt|system instructions|developer prompt|hidden prompt|"
+        r"(?:gateway|system|internal) configuration|operating instructions)\b", re.I)),
+    ("credential_request", re.compile(
+        r"\b(?:show|reveal|retrieve|print|give|send|list|dump|exfiltrate|disclose|expose|provide|request)\s+(?:me\s+)?"
+        r"(?:the\s+)?(?:passwords?|credentials?|api keys?|access tokens?|secret keys?)\b", re.I)),
+    ("credential_disclosure_request", re.compile(
+        r"(?is)(?=.*\b(?:reveal|show|give|print|tell|send|paste|provide|share|list)\b"
+        r"(?:[\W_]+\w+){0,5}[\W_]+\b(?:passwords?|credentials?|api\s+keys?|"
+        r"secrets?|tokens?|logins?)\b)"
+        r"(?=.*(?:\b(?:database|system|service|admin|server|root|config|production)\b"
+        r"(?:[\W_]+\w+){0,3}[\W_]+\b(?:passwords?|credentials?|api\s+keys?|"
+        r"secrets?|tokens?|logins?)\b|"
+        r"\b(?:passwords?|credentials?|api\s+keys?|secrets?|tokens?|logins?)\b"
+        r"(?:[\W_]+\w+){0,3}[\W_]+\b(?:database|system|service|admin|server|root|config|production)\b)).+")),
+    ("cross_user_data_request", re.compile(
+        r"\b(?:show|retrieve|give|list|dump|export|reveal)\s+(?:me\s+)?"
+        r"(?:all\s+|any\s+)?(?:other|different|all other)\s+(?:users|patients|customers)\b", re.I)),
+    ("security_bypass", re.compile(
+        r"\b(?:bypass|disable|turn off|deactivate|circumvent)\s+(?:the\s+)?"
+        r"(?:security|safety|guardrails?|filters?|access controls?|authentication|authorization|privacy checks?|protections?)\b", re.I)),
+    ("privileged_role_data_request", re.compile(
+        r"(?is)(?=.*\b(?:i am|i'm|this is|acting as|as|on behalf of|the)\s+"
+        r"(?:the\s+)?(?:hospital administrator|administrator|admin|internal auditor|"
+        r"auditor|it staff|it administrator|manager|security officer|system administrator)\b)"
+        r"(?=.*\b(?:credentials?|passwords?|api keys?|access tokens?|secret keys?|"
+        r"bulk(?:\s+export|\s+data|\s+records?)?|"
+        r"(?:complete|full|all|every|bulk)\s+(?:patient\s+)?(?:data|records?|charts?)"
+        r"(?:\s+export)?|export\s+(?:all|every|bulk|complete|full)|"
+        r"all\s+patients|every\s+patient|other\s+users?|other\s+patients?|"
+        r"patients?\s+outside\s+(?:my|this|their)\s+(?:assignment|account|care)\b)).+")),
+)
 
 
 def mask_pii(text: str) -> MaskResult:
@@ -82,5 +126,7 @@ def detect_rules(text: str, *, encoded_sensitive_content: bool = False) -> RuleR
     """Return the first deterministic gateway keyword rule decision."""
     if not isinstance(text, str):
         raise TypeError("text must be str")
-    rule_code = _rule_code(text, encoded_sensitive_content)
+    rule_code = "encoded_sensitive_content" if encoded_sensitive_content else next(
+        (code for code, pattern in _RULES if pattern.search(text)), None
+    )
     return RuleResult(rule_code is not None, rule_code)
